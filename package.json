@@ -1,0 +1,22 @@
+{
+  "name": "mykite-fullstack",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "bun run --filter '*' dev",
+    "dev:api": "bun run --filter @mykite/api dev",
+    "dev:web": "bun run --filter @mykite/web dev",
+    "build": "bun run --filter '*' build",
+    "db:generate": "bun run --filter @mykite/database generate",
+    "db:migrate": "bun run --filter @mykite/database migrate",
+    "db:seed": "bun run --filter @mykite/database seed",
+    "typecheck": "bun run --filter '*' typecheck",
+    "clean": "rm -rf apps/*/dist packages/*/dist node_modules/.cache"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.6",
+    "drizzle-orm": "^0.31.2",
+    "postgres": "^3.4.4",
+    "typescript": "^5.4.5"
+  }
+}

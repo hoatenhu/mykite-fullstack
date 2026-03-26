@@ -1,0 +1,439 @@
+{
+  "assessmentType": "holland",
+  "version": "1.0.0",
+  "description": "Bộ trắc nghiệm Holland RIASEC - Bản địa hóa cho Việt Nam",
+  "questions": [
+    {
+      "id": "H-R-01",
+      "dimension": "R",
+      "textVi": "Tôi thích sửa chữa xe máy, xe đạp hoặc đồ điện tử",
+      "textEn": "I enjoy repairing motorcycles, bicycles, or electronics",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-R-02",
+      "dimension": "R",
+      "textVi": "Tôi thích làm việc ngoài trời hơn là trong văn phòng",
+      "textEn": "I prefer working outdoors rather than in an office",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-R-03",
+      "dimension": "R",
+      "textVi": "Tôi thích sử dụng các công cụ, máy móc để tạo ra sản phẩm",
+      "textEn": "I enjoy using tools and machines to create products",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-R-04",
+      "dimension": "R",
+      "textVi": "Tôi thích chăm sóc cây cảnh hoặc vật nuôi",
+      "textEn": "I enjoy taking care of plants or pets",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-R-05",
+      "dimension": "R",
+      "textVi": "Tôi thích làm các công việc thể chất hơn là ngồi một chỗ",
+      "textEn": "I prefer physical work over sitting at a desk",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-R-06",
+      "dimension": "R",
+      "textVi": "Tôi thích tháo lắp, tìm hiểu cách hoạt động của máy móc",
+      "textEn": "I like to disassemble things and understand how they work",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-R-07",
+      "dimension": "R",
+      "textVi": "Tôi cảm thấy thoải mái khi làm việc với đất, gỗ hoặc kim loại",
+      "textEn": "I feel comfortable working with soil, wood, or metal",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-R-08",
+      "dimension": "R",
+      "textVi": "Tôi thích tự tay sửa chữa đồ đạc trong nhà thay vì gọi thợ",
+      "textEn": "I prefer fixing things at home myself rather than calling a repairman",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-I-01",
+      "dimension": "I",
+      "textVi": "Tôi thích giải các bài toán logic và đố vui",
+      "textEn": "I enjoy solving logic puzzles and riddles",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-I-02",
+      "dimension": "I",
+      "textVi": "Tôi hay tự hỏi 'Tại sao?' về các hiện tượng xung quanh",
+      "textEn": "I often ask 'Why?' about phenomena around me",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-I-03",
+      "dimension": "I",
+      "textVi": "Tôi thích đọc sách khoa học hoặc xem video về khám phá",
+      "textEn": "I enjoy reading science books or watching discovery videos",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-I-04",
+      "dimension": "I",
+      "textVi": "Tôi thích phân tích dữ liệu và tìm ra quy luật",
+      "textEn": "I like analyzing data and finding patterns",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-I-05",
+      "dimension": "I",
+      "textVi": "Tôi thích làm thí nghiệm để kiểm chứng giả thuyết",
+      "textEn": "I enjoy conducting experiments to test hypotheses",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-I-06",
+      "dimension": "I",
+      "textVi": "Tôi thích các môn Toán, Lý, Hóa hoặc Sinh học",
+      "textEn": "I enjoy Math, Physics, Chemistry, or Biology",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-I-07",
+      "dimension": "I",
+      "textVi": "Tôi thích tìm hiểu sâu về một vấn đề thay vì chỉ biết qua loa",
+      "textEn": "I prefer to deeply understand a topic rather than just know the basics",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-I-08",
+      "dimension": "I",
+      "textVi": "Tôi thích làm việc độc lập để nghiên cứu một vấn đề",
+      "textEn": "I enjoy working independently to research a problem",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-A-01",
+      "dimension": "A",
+      "textVi": "Tôi thích vẽ, chụp ảnh hoặc thiết kế đồ họa",
+      "textEn": "I enjoy drawing, photography, or graphic design",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-A-02",
+      "dimension": "A",
+      "textVi": "Tôi thích viết văn, làm thơ hoặc sáng tác nội dung",
+      "textEn": "I enjoy writing, poetry, or content creation",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-A-03",
+      "dimension": "A",
+      "textVi": "Tôi thích chơi nhạc cụ hoặc hát",
+      "textEn": "I enjoy playing musical instruments or singing",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-A-04",
+      "dimension": "A",
+      "textVi": "Tôi không thích các công việc quá cứng nhắc, theo khuôn mẫu",
+      "textEn": "I dislike rigid, formulaic work",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-A-05",
+      "dimension": "A",
+      "textVi": "Tôi hay tưởng tượng và có nhiều ý tưởng sáng tạo",
+      "textEn": "I often daydream and have many creative ideas",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-A-06",
+      "dimension": "A",
+      "textVi": "Tôi thích xem phim, kịch hoặc triển lãm nghệ thuật",
+      "textEn": "I enjoy watching movies, theater, or art exhibitions",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-A-07",
+      "dimension": "A",
+      "textVi": "Tôi thích tự do thể hiện bản thân theo cách riêng",
+      "textEn": "I enjoy expressing myself freely in my own way",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-A-08",
+      "dimension": "A",
+      "textVi": "Tôi thích trang trí phòng, sắp xếp không gian theo ý thích",
+      "textEn": "I enjoy decorating and arranging spaces to my liking",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-S-01",
+      "dimension": "S",
+      "textVi": "Tôi thích giúp đỡ bạn bè khi họ gặp khó khăn",
+      "textEn": "I enjoy helping friends when they face difficulties",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-S-02",
+      "dimension": "S",
+      "textVi": "Tôi thích giải thích bài cho các bạn khác hiểu",
+      "textEn": "I enjoy explaining lessons to help others understand",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-S-03",
+      "dimension": "S",
+      "textVi": "Tôi quan tâm đến các vấn đề xã hội và muốn góp phần thay đổi",
+      "textEn": "I care about social issues and want to contribute to change",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-S-04",
+      "dimension": "S",
+      "textVi": "Tôi dễ dàng đồng cảm với người khác",
+      "textEn": "I easily empathize with others",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-S-05",
+      "dimension": "S",
+      "textVi": "Tôi thích tham gia các hoạt động tình nguyện",
+      "textEn": "I enjoy participating in volunteer activities",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-S-06",
+      "dimension": "S",
+      "textVi": "Tôi thích làm việc nhóm hơn là làm một mình",
+      "textEn": "I prefer teamwork over working alone",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-S-07",
+      "dimension": "S",
+      "textVi": "Tôi thích lắng nghe khi người khác chia sẻ tâm sự",
+      "textEn": "I enjoy listening when others share their feelings",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-S-08",
+      "dimension": "S",
+      "textVi": "Tôi muốn làm công việc giúp ích cho cộng đồng",
+      "textEn": "I want to do work that benefits the community",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-E-01",
+      "dimension": "E",
+      "textVi": "Tôi thích thuyết phục người khác theo ý kiến của mình",
+      "textEn": "I enjoy persuading others to agree with my opinions",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-E-02",
+      "dimension": "E",
+      "textVi": "Tôi thích đứng ra tổ chức, dẫn dắt các hoạt động",
+      "textEn": "I enjoy organizing and leading activities",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-E-03",
+      "dimension": "E",
+      "textVi": "Tôi muốn có địa vị và được người khác công nhận",
+      "textEn": "I want to have status and be recognized by others",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-E-04",
+      "dimension": "E",
+      "textVi": "Tôi thích kinh doanh nhỏ như bán hàng online",
+      "textEn": "I enjoy small businesses like selling online",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-E-05",
+      "dimension": "E",
+      "textVi": "Tôi thích đặt mục tiêu và nỗ lực để đạt được",
+      "textEn": "I enjoy setting goals and working hard to achieve them",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-E-06",
+      "dimension": "E",
+      "textVi": "Tôi tự tin khi nói trước đám đông",
+      "textEn": "I am confident speaking in front of crowds",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-E-07",
+      "dimension": "E",
+      "textVi": "Tôi thích cạnh tranh và muốn chiến thắng",
+      "textEn": "I enjoy competition and want to win",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-E-08",
+      "dimension": "E",
+      "textVi": "Tôi quan tâm đến việc kiếm tiền và làm giàu",
+      "textEn": "I am interested in earning money and building wealth",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-C-01",
+      "dimension": "C",
+      "textVi": "Tôi thích sắp xếp đồ đạc ngăn nắp, có trật tự",
+      "textEn": "I like keeping things organized and orderly",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-C-02",
+      "dimension": "C",
+      "textVi": "Tôi thích làm theo quy trình, hướng dẫn rõ ràng",
+      "textEn": "I prefer following clear procedures and instructions",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-C-03",
+      "dimension": "C",
+      "textVi": "Tôi cẩn thận và chú ý đến chi tiết",
+      "textEn": "I am careful and pay attention to details",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-C-04",
+      "dimension": "C",
+      "textVi": "Tôi thích làm việc với số liệu, bảng tính Excel",
+      "textEn": "I enjoy working with numbers and spreadsheets",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-C-05",
+      "dimension": "C",
+      "textVi": "Tôi thích công việc có lịch trình ổn định, dễ dự đoán",
+      "textEn": "I prefer jobs with stable, predictable schedules",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-C-06",
+      "dimension": "C",
+      "textVi": "Tôi thích lưu trữ, phân loại tài liệu, hồ sơ",
+      "textEn": "I enjoy organizing and categorizing documents and files",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-C-07",
+      "dimension": "C",
+      "textVi": "Tôi tuân thủ nội quy và không thích vi phạm quy tắc",
+      "textEn": "I follow rules and dislike breaking regulations",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "H-C-08",
+      "dimension": "C",
+      "textVi": "Tôi thích kiểm tra lại công việc để đảm bảo chính xác",
+      "textEn": "I like double-checking work to ensure accuracy",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    }
+  ]
+}

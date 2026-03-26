@@ -1,0 +1,184 @@
+{
+  "careers": [
+    {
+      "nameVi": "Kỹ sư Phần mềm",
+      "nameEn": "Software Engineer",
+      "descriptionVi": "Thiết kế, phát triển và bảo trì các ứng dụng phần mềm và hệ thống",
+      "hollandCodes": ["RIC", "IRC", "ICR"],
+      "bigfiveProfile": { "O": "medium", "C": "high", "E": "low", "A": "medium", "N": "low" },
+      "futureOutlook": "high",
+      "tags": ["công nghệ", "lập trình", "STEM"]
+    },
+    {
+      "nameVi": "Bác sĩ",
+      "nameEn": "Doctor",
+      "descriptionVi": "Chẩn đoán, điều trị bệnh và chăm sóc sức khỏe cho bệnh nhân",
+      "hollandCodes": ["ISA", "IAS", "SIA"],
+      "bigfiveProfile": { "O": "high", "C": "high", "E": "medium", "A": "high", "N": "low" },
+      "futureOutlook": "high",
+      "tags": ["y tế", "chăm sóc sức khỏe", "khoa học"]
+    },
+    {
+      "nameVi": "Nhà thiết kế đồ họa",
+      "nameEn": "Graphic Designer",
+      "descriptionVi": "Sáng tạo thiết kế trực quan cho thương hiệu, quảng cáo và sản phẩm số",
+      "hollandCodes": ["ARI", "AIR", "ARE"],
+      "bigfiveProfile": { "O": "high", "C": "medium", "E": "medium", "A": "medium", "N": "medium" },
+      "futureOutlook": "medium",
+      "tags": ["sáng tạo", "nghệ thuật", "thiết kế"]
+    },
+    {
+      "nameVi": "Giáo viên",
+      "nameEn": "Teacher",
+      "descriptionVi": "Giảng dạy, truyền đạt kiến thức và kỹ năng cho học sinh",
+      "hollandCodes": ["SAI", "SIA", "SAE"],
+      "bigfiveProfile": { "O": "medium", "C": "high", "E": "high", "A": "high", "N": "low" },
+      "futureOutlook": "medium",
+      "tags": ["giáo dục", "xã hội", "truyền thông"]
+    },
+    {
+      "nameVi": "Doanh nhân khởi nghiệp",
+      "nameEn": "Entrepreneur",
+      "descriptionVi": "Sáng lập và điều hành doanh nghiệp, phát triển sản phẩm/dịch vụ mới",
+      "hollandCodes": ["ESA", "EAS", "ECS"],
+      "bigfiveProfile": { "O": "high", "C": "high", "E": "high", "A": "medium", "N": "low" },
+      "futureOutlook": "high",
+      "tags": ["kinh doanh", "lãnh đạo", "sáng tạo"]
+    },
+    {
+      "nameVi": "Kế toán viên",
+      "nameEn": "Accountant",
+      "descriptionVi": "Quản lý tài chính, kiểm toán và lập báo cáo tài chính cho tổ chức",
+      "hollandCodes": ["CES", "CEI", "CSE"],
+      "bigfiveProfile": { "O": "low", "C": "high", "E": "low", "A": "medium", "N": "low" },
+      "futureOutlook": "medium",
+      "tags": ["tài chính", "kinh doanh", "phân tích"]
+    },
+    {
+      "nameVi": "Nhà tâm lý học",
+      "nameEn": "Psychologist",
+      "descriptionVi": "Nghiên cứu hành vi con người và tư vấn tâm lý cho khách hàng",
+      "hollandCodes": ["SIA", "SAI", "IAS"],
+      "bigfiveProfile": { "O": "high", "C": "high", "E": "medium", "A": "high", "N": "low" },
+      "futureOutlook": "high",
+      "tags": ["y tế", "xã hội", "nghiên cứu"]
+    },
+    {
+      "nameVi": "Kỹ sư cơ khí",
+      "nameEn": "Mechanical Engineer",
+      "descriptionVi": "Thiết kế, chế tạo và bảo trì các hệ thống cơ khí và máy móc",
+      "hollandCodes": ["RIE", "RIC", "IRE"],
+      "bigfiveProfile": { "O": "medium", "C": "high", "E": "low", "A": "medium", "N": "low" },
+      "futureOutlook": "medium",
+      "tags": ["kỹ thuật", "STEM", "sản xuất"]
+    },
+    {
+      "nameVi": "Nhà báo",
+      "nameEn": "Journalist",
+      "descriptionVi": "Thu thập, phân tích và trình bày tin tức qua các kênh truyền thông",
+      "hollandCodes": ["AES", "ASE", "EAS"],
+      "bigfiveProfile": { "O": "high", "C": "medium", "E": "high", "A": "medium", "N": "medium" },
+      "futureOutlook": "medium",
+      "tags": ["truyền thông", "viết lách", "xã hội"]
+    },
+    {
+      "nameVi": "Chuyên viên Marketing",
+      "nameEn": "Marketing Specialist",
+      "descriptionVi": "Xây dựng chiến lược tiếp thị và quảng bá sản phẩm/dịch vụ",
+      "hollandCodes": ["EAS", "ESA", "AES"],
+      "bigfiveProfile": { "O": "high", "C": "medium", "E": "high", "A": "medium", "N": "low" },
+      "futureOutlook": "high",
+      "tags": ["kinh doanh", "sáng tạo", "truyền thông"]
+    },
+    {
+      "nameVi": "Nghiên cứu viên khoa học",
+      "nameEn": "Research Scientist",
+      "descriptionVi": "Thực hiện nghiên cứu khoa học để khám phá kiến thức mới",
+      "hollandCodes": ["IRC", "IRA", "IAR"],
+      "bigfiveProfile": { "O": "high", "C": "high", "E": "low", "A": "medium", "N": "low" },
+      "futureOutlook": "high",
+      "tags": ["khoa học", "nghiên cứu", "STEM"]
+    },
+    {
+      "nameVi": "Kiến trúc sư",
+      "nameEn": "Architect",
+      "descriptionVi": "Thiết kế công trình xây dựng, quy hoạch không gian kiến trúc",
+      "hollandCodes": ["AIR", "ARI", "IRA"],
+      "bigfiveProfile": { "O": "high", "C": "high", "E": "medium", "A": "medium", "N": "low" },
+      "futureOutlook": "medium",
+      "tags": ["thiết kế", "nghệ thuật", "kỹ thuật"]
+    },
+    {
+      "nameVi": "Y tá/Điều dưỡng",
+      "nameEn": "Nurse",
+      "descriptionVi": "Chăm sóc bệnh nhân, hỗ trợ bác sĩ trong điều trị",
+      "hollandCodes": ["SIR", "SIA", "SIC"],
+      "bigfiveProfile": { "O": "medium", "C": "high", "E": "medium", "A": "high", "N": "low" },
+      "futureOutlook": "high",
+      "tags": ["y tế", "chăm sóc", "xã hội"]
+    },
+    {
+      "nameVi": "Luật sư",
+      "nameEn": "Lawyer",
+      "descriptionVi": "Tư vấn pháp luật, đại diện và bảo vệ quyền lợi khách hàng",
+      "hollandCodes": ["ESI", "EIS", "SEI"],
+      "bigfiveProfile": { "O": "medium", "C": "high", "E": "high", "A": "low", "N": "low" },
+      "futureOutlook": "medium",
+      "tags": ["pháp luật", "kinh doanh", "xã hội"]
+    },
+    {
+      "nameVi": "Nhà phân tích dữ liệu",
+      "nameEn": "Data Analyst",
+      "descriptionVi": "Thu thập, xử lý và phân tích dữ liệu để đưa ra insight kinh doanh",
+      "hollandCodes": ["ICE", "ICS", "CIE"],
+      "bigfiveProfile": { "O": "medium", "C": "high", "E": "low", "A": "medium", "N": "low" },
+      "futureOutlook": "high",
+      "tags": ["công nghệ", "phân tích", "kinh doanh"]
+    },
+    {
+      "nameVi": "Chuyên viên nhân sự",
+      "nameEn": "HR Specialist",
+      "descriptionVi": "Quản lý tuyển dụng, đào tạo và phát triển nguồn nhân lực",
+      "hollandCodes": ["SEC", "ESC", "SCE"],
+      "bigfiveProfile": { "O": "medium", "C": "high", "E": "high", "A": "high", "N": "low" },
+      "futureOutlook": "medium",
+      "tags": ["kinh doanh", "xã hội", "quản lý"]
+    },
+    {
+      "nameVi": "Đầu bếp",
+      "nameEn": "Chef",
+      "descriptionVi": "Sáng tạo và chế biến các món ăn trong nhà hàng, khách sạn",
+      "hollandCodes": ["RAE", "RAS", "ARE"],
+      "bigfiveProfile": { "O": "high", "C": "medium", "E": "medium", "A": "medium", "N": "medium" },
+      "futureOutlook": "medium",
+      "tags": ["ẩm thực", "sáng tạo", "dịch vụ"]
+    },
+    {
+      "nameVi": "Nhiếp ảnh gia",
+      "nameEn": "Photographer",
+      "descriptionVi": "Chụp ảnh sự kiện, chân dung, sản phẩm và nghệ thuật",
+      "hollandCodes": ["ARI", "ARE", "AIR"],
+      "bigfiveProfile": { "O": "high", "C": "medium", "E": "medium", "A": "medium", "N": "medium" },
+      "futureOutlook": "medium",
+      "tags": ["nghệ thuật", "sáng tạo", "truyền thông"]
+    },
+    {
+      "nameVi": "Chuyên viên AI/Machine Learning",
+      "nameEn": "AI/ML Engineer",
+      "descriptionVi": "Phát triển các hệ thống trí tuệ nhân tạo và học máy",
+      "hollandCodes": ["IRC", "IRA", "RIC"],
+      "bigfiveProfile": { "O": "high", "C": "high", "E": "low", "A": "medium", "N": "low" },
+      "futureOutlook": "high",
+      "tags": ["công nghệ", "AI", "STEM", "tương lai"]
+    },
+    {
+      "nameVi": "Nhà hoạt động xã hội",
+      "nameEn": "Social Worker",
+      "descriptionVi": "Hỗ trợ cá nhân và cộng đồng giải quyết các vấn đề xã hội",
+      "hollandCodes": ["SEA", "SAE", "SIA"],
+      "bigfiveProfile": { "O": "medium", "C": "high", "E": "high", "A": "high", "N": "low" },
+      "futureOutlook": "medium",
+      "tags": ["xã hội", "cộng đồng", "tư vấn"]
+    }
+  ]
+}

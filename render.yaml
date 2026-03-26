@@ -1,0 +1,39 @@
+services:
+  # Backend API
+  - type: web
+    name: mykite-api
+    runtime: node
+    buildCommand: bun install && bun run build --filter @mykite/api
+    startCommand: bun run --filter @mykite/api start
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mykite-db
+          property: connectionString
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5006
+    healthCheckPath: /health
+
+  # Frontend
+  - type: web
+    name: mykite-web
+    runtime: static
+    buildCommand: bun install && bun run --filter @mykite/web build
+    staticPublishPath: apps/web/dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: mykite-api
+          type: web
+          property: url
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+databases:
+  - name: mykite-db
+    databaseName: mykite
+    plan: free

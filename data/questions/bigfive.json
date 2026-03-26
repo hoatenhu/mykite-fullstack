@@ -1,0 +1,907 @@
+{
+  "assessmentType": "bigfive",
+  "version": "1.0.0",
+  "description": "Bộ trắc nghiệm Big Five OCEAN - Bản địa hóa cho Việt Nam",
+  "questions": [
+    {
+      "id": "BF-O-01",
+      "dimension": "O",
+      "textVi": "Tôi có trí tưởng tượng phong phú",
+      "textEn": "I have a vivid imagination",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-O-02",
+      "dimension": "O",
+      "textVi": "Tôi thích thử những món ăn mới, lạ",
+      "textEn": "I enjoy trying new and exotic foods",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-O-03",
+      "dimension": "O",
+      "textVi": "Tôi thích suy nghĩ về các ý tưởng trừu tượng",
+      "textEn": "I enjoy thinking about abstract ideas",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-O-04",
+      "dimension": "O",
+      "textVi": "Tôi thích khám phá những nơi mới và văn hóa khác",
+      "textEn": "I like exploring new places and different cultures",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-O-05",
+      "dimension": "O",
+      "textVi": "Tôi thấy nghệ thuật và âm nhạc rất quan trọng",
+      "textEn": "I find art and music very important",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-O-06",
+      "dimension": "O",
+      "textVi": "Tôi thích thay đổi cách làm việc thay vì làm theo lối cũ",
+      "textEn": "I prefer changing methods rather than sticking to old ways",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-O-07",
+      "dimension": "O",
+      "textVi": "Tôi không có hứng thú với nghệ thuật",
+      "textEn": "I have no interest in art",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-O-08",
+      "dimension": "O",
+      "textVi": "Tôi hay tìm hiểu về triết học và ý nghĩa cuộc sống",
+      "textEn": "I often explore philosophy and the meaning of life",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-O-09",
+      "dimension": "O",
+      "textVi": "Tôi thích những ý tưởng mới mẻ hơn các ý tưởng quen thuộc",
+      "textEn": "I prefer novel ideas over familiar ones",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-O-10",
+      "dimension": "O",
+      "textVi": "Tôi không thích thử những thứ mới",
+      "textEn": "I don't like trying new things",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-O-11",
+      "dimension": "O",
+      "textVi": "Tôi thường suy nghĩ sâu xa về các vấn đề",
+      "textEn": "I often think deeply about issues",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-O-12",
+      "dimension": "O",
+      "textVi": "Tôi thích học những điều mới mỗi ngày",
+      "textEn": "I enjoy learning something new every day",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-O-13",
+      "dimension": "O",
+      "textVi": "Tôi cảm thấy thú vị với các khái niệm phức tạp",
+      "textEn": "I find complex concepts fascinating",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-O-14",
+      "dimension": "O",
+      "textVi": "Tôi thường mơ mộng và hay bay bổng",
+      "textEn": "I often daydream and get lost in thought",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-O-15",
+      "dimension": "O",
+      "textVi": "Tôi thích xem phim tài liệu về khoa học, lịch sử",
+      "textEn": "I enjoy watching documentaries about science and history",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-O-16",
+      "dimension": "O",
+      "textVi": "Tôi thường có nhiều câu hỏi về thế giới xung quanh",
+      "textEn": "I often have many questions about the world around me",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-O-17",
+      "dimension": "O",
+      "textVi": "Tôi thích đọc sách thuộc nhiều thể loại khác nhau",
+      "textEn": "I enjoy reading books from various genres",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-O-18",
+      "dimension": "O",
+      "textVi": "Tôi hay tìm cách làm mới công việc quen thuộc",
+      "textEn": "I often look for new ways to do familiar tasks",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-O-19",
+      "dimension": "O",
+      "textVi": "Tôi thích thảo luận về các chủ đề triết học",
+      "textEn": "I enjoy discussing philosophical topics",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-O-20",
+      "dimension": "O",
+      "textVi": "Tôi dễ bị cuốn hút bởi những điều mới lạ",
+      "textEn": "I am easily fascinated by new and unusual things",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-C-01",
+      "dimension": "C",
+      "textVi": "Tôi luôn hoàn thành công việc đúng hạn",
+      "textEn": "I always complete my work on time",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-C-02",
+      "dimension": "C",
+      "textVi": "Tôi là người có tổ chức và ngăn nắp",
+      "textEn": "I am organized and tidy",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-C-03",
+      "dimension": "C",
+      "textVi": "Tôi hay trì hoãn công việc",
+      "textEn": "I often procrastinate",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-C-04",
+      "dimension": "C",
+      "textVi": "Tôi đặt mục tiêu rõ ràng và nỗ lực đạt được",
+      "textEn": "I set clear goals and work hard to achieve them",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-C-05",
+      "dimension": "C",
+      "textVi": "Tôi thường lên kế hoạch trước khi làm việc",
+      "textEn": "I usually plan before doing things",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-C-06",
+      "dimension": "C",
+      "textVi": "Tôi dễ bị xao nhãng và mất tập trung",
+      "textEn": "I am easily distracted and lose focus",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-C-07",
+      "dimension": "C",
+      "textVi": "Tôi chú ý đến từng chi tiết nhỏ",
+      "textEn": "I pay attention to small details",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-C-08",
+      "dimension": "C",
+      "textVi": "Tôi hay quên đồ đạc hoặc lịch hẹn",
+      "textEn": "I often forget things or appointments",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-C-09",
+      "dimension": "C",
+      "textVi": "Tôi làm việc chăm chỉ và kiên trì",
+      "textEn": "I work hard and persistently",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-C-10",
+      "dimension": "C",
+      "textVi": "Tôi tuân thủ nội quy và quy định",
+      "textEn": "I follow rules and regulations",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-C-11",
+      "dimension": "C",
+      "textVi": "Tôi thường bỏ dở công việc giữa chừng",
+      "textEn": "I often leave tasks unfinished",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-C-12",
+      "dimension": "C",
+      "textVi": "Tôi chuẩn bị kỹ trước mỗi kỳ thi",
+      "textEn": "I prepare thoroughly before each exam",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-C-13",
+      "dimension": "C",
+      "textVi": "Tôi có thói quen ghi chép và theo dõi tiến độ",
+      "textEn": "I have a habit of taking notes and tracking progress",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-C-14",
+      "dimension": "C",
+      "textVi": "Tôi thường nộp bài muộn hoặc thiếu",
+      "textEn": "I often submit work late or incomplete",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-C-15",
+      "dimension": "C",
+      "textVi": "Tôi kiểm tra lại công việc trước khi nộp",
+      "textEn": "I double-check my work before submitting",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-C-16",
+      "dimension": "C",
+      "textVi": "Tôi giữ lời hứa và cam kết của mình",
+      "textEn": "I keep my promises and commitments",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-C-17",
+      "dimension": "C",
+      "textVi": "Tôi hay làm việc theo cảm hứng, không có kế hoạch",
+      "textEn": "I often work on impulse without planning",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-C-18",
+      "dimension": "C",
+      "textVi": "Tôi có khả năng quản lý thời gian tốt",
+      "textEn": "I have good time management skills",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-C-19",
+      "dimension": "C",
+      "textVi": "Tôi cố gắng làm mọi việc đạt tiêu chuẩn cao",
+      "textEn": "I strive to do everything to a high standard",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-C-20",
+      "dimension": "C",
+      "textVi": "Tôi có thể tập trung làm việc trong thời gian dài",
+      "textEn": "I can focus on work for extended periods",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-E-01",
+      "dimension": "E",
+      "textVi": "Tôi thích giao tiếp với nhiều người",
+      "textEn": "I enjoy socializing with many people",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-E-02",
+      "dimension": "E",
+      "textVi": "Tôi cảm thấy thoải mái khi là trung tâm của sự chú ý",
+      "textEn": "I feel comfortable being the center of attention",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-E-03",
+      "dimension": "E",
+      "textVi": "Tôi thường im lặng khi ở trong nhóm đông người",
+      "textEn": "I tend to be quiet in large groups",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-E-04",
+      "dimension": "E",
+      "textVi": "Tôi hay bắt chuyện với người lạ",
+      "textEn": "I often strike up conversations with strangers",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-E-05",
+      "dimension": "E",
+      "textVi": "Tôi thích đi dự tiệc và các buổi họp mặt",
+      "textEn": "I enjoy going to parties and gatherings",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-E-06",
+      "dimension": "E",
+      "textVi": "Tôi thích ở một mình hơn là trong đám đông",
+      "textEn": "I prefer being alone rather than in crowds",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-E-07",
+      "dimension": "E",
+      "textVi": "Tôi dễ dàng kết bạn mới",
+      "textEn": "I easily make new friends",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-E-08",
+      "dimension": "E",
+      "textVi": "Tôi hay nói nhiều khi giao tiếp",
+      "textEn": "I tend to talk a lot in conversations",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-E-09",
+      "dimension": "E",
+      "textVi": "Tôi cảm thấy mệt mỏi sau khi giao tiếp xã hội nhiều",
+      "textEn": "I feel drained after a lot of social interaction",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-E-10",
+      "dimension": "E",
+      "textVi": "Tôi thích tham gia các hoạt động nhóm",
+      "textEn": "I enjoy participating in group activities",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-E-11",
+      "dimension": "E",
+      "textVi": "Tôi là người năng động và hoạt bát",
+      "textEn": "I am energetic and lively",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-E-12",
+      "dimension": "E",
+      "textVi": "Tôi hay chủ động rủ bạn bè đi chơi",
+      "textEn": "I often take the initiative to invite friends out",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-E-13",
+      "dimension": "E",
+      "textVi": "Tôi thích làm việc độc lập hơn làm việc nhóm",
+      "textEn": "I prefer working independently rather than in teams",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-E-14",
+      "dimension": "E",
+      "textVi": "Tôi tự tin khi thuyết trình trước lớp",
+      "textEn": "I am confident when presenting in front of class",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-E-15",
+      "dimension": "E",
+      "textVi": "Tôi thích các hoạt động sôi động, náo nhiệt",
+      "textEn": "I enjoy lively and exciting activities",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-E-16",
+      "dimension": "E",
+      "textVi": "Tôi cảm thấy được tiếp thêm năng lượng khi gặp gỡ mọi người",
+      "textEn": "I feel energized when meeting people",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-E-17",
+      "dimension": "E",
+      "textVi": "Tôi thường là người nói đầu tiên trong các cuộc thảo luận",
+      "textEn": "I am usually the first to speak in discussions",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-E-18",
+      "dimension": "E",
+      "textVi": "Tôi thích ngày cuối tuần yên tĩnh ở nhà",
+      "textEn": "I prefer quiet weekends at home",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-E-19",
+      "dimension": "E",
+      "textVi": "Tôi có nhiều bạn bè và quen biết rộng",
+      "textEn": "I have many friends and a wide social circle",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-E-20",
+      "dimension": "E",
+      "textVi": "Tôi thích trò chuyện qua điện thoại hơn là nhắn tin",
+      "textEn": "I prefer phone calls over texting",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-A-01",
+      "dimension": "A",
+      "textVi": "Tôi luôn cố gắng giúp đỡ người khác",
+      "textEn": "I always try to help others",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-A-02",
+      "dimension": "A",
+      "textVi": "Tôi tin rằng con người về bản chất là tốt",
+      "textEn": "I believe people are fundamentally good",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-A-03",
+      "dimension": "A",
+      "textVi": "Tôi hay tranh cãi với người khác",
+      "textEn": "I often argue with others",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-A-04",
+      "dimension": "A",
+      "textVi": "Tôi dễ tha thứ cho người làm tổn thương mình",
+      "textEn": "I easily forgive those who hurt me",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-A-05",
+      "dimension": "A",
+      "textVi": "Tôi quan tâm đến cảm xúc của người khác",
+      "textEn": "I care about others' feelings",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-A-06",
+      "dimension": "A",
+      "textVi": "Tôi thường nghi ngờ động cơ của người khác",
+      "textEn": "I often suspect others' motives",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-A-07",
+      "dimension": "A",
+      "textVi": "Tôi thích hợp tác hơn là cạnh tranh",
+      "textEn": "I prefer cooperation over competition",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-A-08",
+      "dimension": "A",
+      "textVi": "Tôi hay chỉ trích lỗi lầm của người khác",
+      "textEn": "I often criticize others' mistakes",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-A-09",
+      "dimension": "A",
+      "textVi": "Tôi cố gắng hòa giải khi có xung đột",
+      "textEn": "I try to mediate when there is conflict",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-A-10",
+      "dimension": "A",
+      "textVi": "Tôi thường nhường nhịn trong các cuộc tranh luận",
+      "textEn": "I often yield in arguments",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-A-11",
+      "dimension": "A",
+      "textVi": "Tôi dễ dàng đồng cảm với hoàn cảnh của người khác",
+      "textEn": "I easily empathize with others' situations",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-A-12",
+      "dimension": "A",
+      "textVi": "Tôi hay nói thẳng mà không quan tâm người khác nghĩ gì",
+      "textEn": "I often speak bluntly without considering others' thoughts",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-A-13",
+      "dimension": "A",
+      "textVi": "Tôi tôn trọng ý kiến của người khác dù khác quan điểm",
+      "textEn": "I respect others' opinions even when I disagree",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-A-14",
+      "dimension": "A",
+      "textVi": "Tôi thường đặt nhu cầu của mình lên trên người khác",
+      "textEn": "I often put my needs above others",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-A-15",
+      "dimension": "A",
+      "textVi": "Tôi thích chia sẻ và hào phóng với mọi người",
+      "textEn": "I like to share and be generous with others",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-A-16",
+      "dimension": "A",
+      "textVi": "Tôi kiên nhẫn với người làm việc chậm hơn tôi",
+      "textEn": "I am patient with people who work slower than me",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-A-17",
+      "dimension": "A",
+      "textVi": "Tôi hay cảm thấy khó chịu với người có ý kiến khác",
+      "textEn": "I often feel annoyed with people who have different opinions",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-A-18",
+      "dimension": "A",
+      "textVi": "Tôi sẵn sàng hy sinh lợi ích cá nhân vì người khác",
+      "textEn": "I am willing to sacrifice personal interests for others",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-A-19",
+      "dimension": "A",
+      "textVi": "Tôi thường an ủi bạn bè khi họ buồn",
+      "textEn": "I often comfort friends when they are sad",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-A-20",
+      "dimension": "A",
+      "textVi": "Tôi dễ mất kiên nhẫn với người khác",
+      "textEn": "I easily lose patience with others",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-N-01",
+      "dimension": "N",
+      "textVi": "Tôi hay cảm thấy lo lắng về tương lai",
+      "textEn": "I often feel anxious about the future",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-N-02",
+      "dimension": "N",
+      "textVi": "Tôi ít khi cảm thấy buồn bã",
+      "textEn": "I rarely feel sad",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-N-03",
+      "dimension": "N",
+      "textVi": "Tôi dễ bị stress trước kỳ thi",
+      "textEn": "I easily get stressed before exams",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-N-04",
+      "dimension": "N",
+      "textVi": "Tôi thường bình tĩnh trong các tình huống khó khăn",
+      "textEn": "I usually stay calm in difficult situations",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-N-05",
+      "dimension": "N",
+      "textVi": "Tôi hay thay đổi tâm trạng đột ngột",
+      "textEn": "I often have sudden mood changes",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-N-06",
+      "dimension": "N",
+      "textVi": "Tôi dễ cảm thấy tự ti về bản thân",
+      "textEn": "I easily feel insecure about myself",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-N-07",
+      "dimension": "N",
+      "textVi": "Tôi không hay lo nghĩ về những điều nhỏ nhặt",
+      "textEn": "I don't usually worry about small things",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-N-08",
+      "dimension": "N",
+      "textVi": "Tôi hay cảm thấy căng thẳng và áp lực",
+      "textEn": "I often feel tense and pressured",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-N-09",
+      "dimension": "N",
+      "textVi": "Tôi dễ bực bội khi mọi thứ không như ý",
+      "textEn": "I easily get frustrated when things don't go my way",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-N-10",
+      "dimension": "N",
+      "textVi": "Tôi có thể xử lý áp lực tốt",
+      "textEn": "I can handle pressure well",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-N-11",
+      "dimension": "N",
+      "textVi": "Tôi hay suy nghĩ tiêu cực về bản thân",
+      "textEn": "I often have negative thoughts about myself",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-N-12",
+      "dimension": "N",
+      "textVi": "Tôi cảm thấy thoải mái và thư giãn hầu hết thời gian",
+      "textEn": "I feel relaxed and at ease most of the time",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-N-13",
+      "dimension": "N",
+      "textVi": "Tôi dễ bị tổn thương bởi lời chỉ trích",
+      "textEn": "I am easily hurt by criticism",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-N-14",
+      "dimension": "N",
+      "textVi": "Tôi hay mất ngủ vì lo lắng",
+      "textEn": "I often lose sleep due to worrying",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-N-15",
+      "dimension": "N",
+      "textVi": "Tôi nhanh chóng lấy lại bình tĩnh sau khi tức giận",
+      "textEn": "I quickly calm down after getting angry",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-N-16",
+      "dimension": "N",
+      "textVi": "Tôi thường cảm thấy cô đơn",
+      "textEn": "I often feel lonely",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-N-17",
+      "dimension": "N",
+      "textVi": "Tôi dễ cảm thấy xấu hổ",
+      "textEn": "I easily feel embarrassed",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-N-18",
+      "dimension": "N",
+      "textVi": "Tôi lạc quan về tương lai của mình",
+      "textEn": "I am optimistic about my future",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": true
+    },
+    {
+      "id": "BF-N-19",
+      "dimension": "N",
+      "textVi": "Tôi hay hối hận về những quyết định đã qua",
+      "textEn": "I often regret past decisions",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    },
+    {
+      "id": "BF-N-20",
+      "dimension": "N",
+      "textVi": "Tôi dễ bị choáng ngợp bởi cảm xúc",
+      "textEn": "I am easily overwhelmed by emotions",
+      "responseType": "likert5",
+      "weight": 1,
+      "isReversed": false
+    }
+  ]
+}
