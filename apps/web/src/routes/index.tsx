@@ -1,151 +1,199 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import type { ReactNode } from 'react'
+import { createFileRoute } from '@tanstack/react-router'
+import { AssessmentCard } from '@/components/AssessmentCard'
+import { BrandLogo } from '@/components/BrandLogo'
+import { ArrowRightIcon, HeartHandshakeIcon, SparkIcon } from '@/components/icons'
+import { ButtonLink, Card, PageContainer, Pill, SectionTitle } from '@/components/ui'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
 })
 
+const featuredAssessments = [
+  {
+    id: 'holland',
+    type: 'holland' as const,
+    nameVi: 'Holland RIASEC',
+    nameEn: 'Holland RIASEC',
+    descriptionVi:
+      'Khám phá 6 nhóm sở thích nghề nghiệp để biết bạn hợp kiểu công việc, môi trường học tập và lộ trình phát triển nào.',
+    descriptionEn: null,
+    estimatedMinutes: 10,
+    questionCount: 48,
+  },
+  {
+    id: 'bigfive',
+    type: 'bigfive' as const,
+    nameVi: 'Big Five OCEAN',
+    nameEn: 'Big Five OCEAN',
+    descriptionVi:
+      'Đo 5 nhóm tính cách cốt lõi để hiểu cách bạn suy nghĩ, học tập, hợp tác và phản ứng với áp lực.',
+    descriptionEn: null,
+    estimatedMinutes: 15,
+    questionCount: 100,
+  },
+]
+
 function HomePage() {
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-500 to-primary-700 text-white py-20">
-        <div className="max-w-5xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Khám phá Tiềm năng
-            <br />
-            <span className="text-primary-200">Tìm nghề Phù hợp</span>
-          </h1>
-          <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
-            Trắc nghiệm hướng nghiệp dựa trên Holland RIASEC và Big Five OCEAN,
-            giúp bạn hiểu rõ bản thân và định hướng nghề nghiệp trong kỷ nguyên AI
-          </p>
-          <Link
-            to="/assessments"
-            className="inline-flex items-center gap-2 bg-white text-primary-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-primary-50 transition-colors shadow-lg"
-          >
-            Bắt đầu Trắc nghiệm
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </Link>
-        </div>
+    <div className="pb-20">
+      <section className="overflow-hidden pt-8 sm:pt-12">
+        <PageContainer>
+          <Card className="relative overflow-hidden border-primary-100 bg-gradient-to-br from-white via-primary-50 to-cream-50 p-8 sm:p-12 lg:p-14">
+            <div className="absolute -right-24 top-0 h-64 w-64 rounded-full bg-primary-100/60 blur-3xl" />
+            <div className="absolute bottom-0 left-0 h-48 w-48 rounded-full bg-cream-100/80 blur-3xl" />
+
+            <div className="relative grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+              <div>
+                <Pill className="border-primary-200 bg-white/80">Trắc nghiệm hướng nghiệp cho học sinh và người trẻ</Pill>
+                <h1 className="mt-6 max-w-3xl text-4xl font-semibold leading-tight tracking-tight text-ink-900 sm:text-5xl lg:text-6xl">
+                  Hiểu mình rõ hơn để chọn ngành và nghề bớt mơ hồ.
+                </h1>
+                <p className="mt-6 max-w-2xl text-lg leading-8 text-ink-600">
+                  MyKite kết hợp Holland RIASEC và Big Five để biến trắc nghiệm thành một hành trình khám phá bản thân gần gũi, dễ hiểu và đủ tin cậy để bạn hành động tiếp.
+                </p>
+
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  <ButtonLink to="/assessments" className="w-full sm:w-auto">
+                    Bắt đầu trắc nghiệm
+                    <ArrowRightIcon />
+                  </ButtonLink>
+                  <ButtonLink to="/assessments" variant="secondary" className="w-full sm:w-auto">
+                    Xem 2 bài đánh giá
+                  </ButtonLink>
+                </div>
+
+                <div className="mt-8 grid gap-3 text-sm text-ink-600 sm:grid-cols-3">
+                  <div className="rounded-2xl bg-white/80 px-4 py-3">
+                    <div className="font-semibold text-ink-900">10-15 phút</div>
+                    <div className="mt-1">Hoàn thành nhanh, không quá tải.</div>
+                  </div>
+                  <div className="rounded-2xl bg-white/80 px-4 py-3">
+                    <div className="font-semibold text-ink-900">2 góc nhìn</div>
+                    <div className="mt-1">Sở thích nghề nghiệp và tính cách.</div>
+                  </div>
+                  <div className="rounded-2xl bg-white/80 px-4 py-3">
+                    <div className="font-semibold text-ink-900">Dễ hiểu</div>
+                    <div className="mt-1">Kết quả viết bằng ngôn ngữ gần gũi.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative mx-auto w-full max-w-md">
+                <div className="absolute inset-6 rounded-[32px] bg-primary-200/70 blur-3xl" />
+                <Card className="relative border-primary-100 bg-white/90 p-6">
+                  <BrandLogo className="mx-auto h-16 w-auto" />
+                  <div className="mt-6 rounded-[28px] bg-primary-700 px-5 py-6 text-white shadow-soft">
+                    <p className="text-sm uppercase tracking-[0.24em] text-primary-100">MyKite Mood</p>
+                    <p className="mt-3 text-2xl font-medium leading-snug">
+                      Trẻ trung, gần gũi, đủ nghiêm túc để bạn tin vào kết quả.
+                    </p>
+                  </div>
+                  <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-2xl bg-primary-50 p-4">
+                      <p className="text-sm font-medium text-primary-700">Màu thương hiệu</p>
+                      <div className="mt-3 flex gap-2">
+                        <span className="h-8 w-8 rounded-full bg-primary-700" />
+                        <span className="h-8 w-8 rounded-full bg-primary-400" />
+                        <span className="h-8 w-8 rounded-full bg-cream-200" />
+                      </div>
+                    </div>
+                    <div className="rounded-2xl bg-ink-900 p-4 text-white">
+                      <p className="text-sm font-medium text-primary-100">Giọng điệu</p>
+                      <p className="mt-2 text-sm leading-6 text-white/80">Nhẹ nhàng, rõ ràng, không phô trương.</p>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+            </div>
+          </Card>
+        </PageContainer>
       </section>
 
-      {/* Features */}
-      <section className="py-16 bg-white">
-        <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Tại sao chọn MyKite?</h2>
-          <div className="grid md:grid-cols-3 gap-8">
+      <section className="pt-20">
+        <PageContainer>
+          <SectionTitle
+            eyebrow="Tại sao là MyKite"
+            title="Một trải nghiệm đủ thân thiện để bắt đầu, đủ chỉn chu để bạn muốn tin tưởng."
+            description="Thay vì biến trắc nghiệm thành một biểu mẫu khô khan, MyKite làm cho việc hiểu bản thân trở nên nhẹ hơn, gần gũi hơn và dễ chuyển thành hành động hơn."
+            align="center"
+          />
+
+          <div className="mt-10 grid gap-6 lg:grid-cols-3">
             <FeatureCard
-              icon="🎯"
-              title="Khoa học & Chuẩn hóa"
-              description="Dựa trên các mô hình tâm lý học được công nhận quốc tế: Holland RIASEC và Big Five OCEAN"
+              icon={<SparkIcon className="h-6 w-6" />}
+              title="Diễn giải dễ hiểu"
+              description="Kết quả viết theo ngôn ngữ gần gũi để học sinh, phụ huynh và cố vấn đều có thể đọc được ngay."
             />
             <FeatureCard
-              icon="🇻🇳"
-              title="Bản địa hóa"
-              description="Câu hỏi được thiết kế phù hợp với ngữ cảnh và văn hóa học sinh Việt Nam"
+              icon={<HeartHandshakeIcon className="h-6 w-6" />}
+              title="Thân thiện nhưng không hời hợt"
+              description="Visual trẻ trung, mềm mại, nhưng vẫn giữ đủ độ tin cậy cho một công cụ định hướng học tập và nghề nghiệp."
             />
             <FeatureCard
-              icon="🤖"
-              title="Hướng tới AI"
-              description="Tích hợp xu hướng nghề nghiệp trong kỷ nguyên AI và kinh tế số"
+              icon={<ArrowRightIcon className="h-6 w-6" />}
+              title="Biết bước tiếp theo"
+              description="Sau kết quả, bạn có thể tiếp tục nhìn vào nhóm nghề gợi ý, điểm mạnh nổi bật và hướng phát triển phù hợp."
             />
           </div>
-        </div>
+        </PageContainer>
       </section>
 
-      {/* Assessments Preview */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Bộ Trắc nghiệm</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <AssessmentCard
-              type="holland"
-              title="Holland RIASEC"
-              description="Khám phá 6 nhóm sở thích nghề nghiệp: Thực tế, Nghiên cứu, Nghệ thuật, Xã hội, Doanh nghiệp, Quy củ"
-              questions={48}
-              time={10}
-            />
-            <AssessmentCard
-              type="bigfive"
-              title="Big Five OCEAN"
-              description="Phân tích 5 khía cạnh tính cách: Cởi mở, Tận tâm, Hướng ngoại, Dễ chịu, Nhạy cảm"
-              questions={100}
-              time={15}
-            />
+      <section className="pt-20">
+        <PageContainer>
+          <SectionTitle
+            eyebrow="Hai góc nhìn"
+            title="Bắt đầu với một bài, hoặc làm cả hai để có bức tranh toàn diện hơn."
+            description="Holland giúp bạn nhìn thấy kiểu nghề phù hợp. Big Five giúp bạn hiểu cách mình học, hợp tác và xử lý áp lực."
+          />
+
+          <div className="mt-10 grid gap-6 lg:grid-cols-2">
+            {featuredAssessments.map((assessment) => (
+              <AssessmentCard key={assessment.id} assessment={assessment} />
+            ))}
           </div>
-        </div>
+        </PageContainer>
       </section>
 
-      {/* CTA */}
-      <section className="py-16 bg-primary-600 text-white">
-        <div className="max-w-3xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Sẵn sàng khám phá bản thân?</h2>
-          <p className="text-primary-100 mb-8">
-            Chỉ mất 10-15 phút để hoàn thành trắc nghiệm và nhận kết quả chi tiết
-          </p>
-          <Link
-            to="/assessments"
-            className="inline-flex items-center gap-2 bg-white text-primary-600 px-8 py-4 rounded-full font-semibold hover:bg-primary-50 transition-colors"
-          >
-            Làm Trắc nghiệm Ngay
-          </Link>
-        </div>
+      <section className="pt-20">
+        <PageContainer>
+          <Card className="border-primary-100 bg-primary-700 p-8 text-white sm:p-10">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+              <div className="max-w-2xl">
+                <p className="text-sm uppercase tracking-[0.2em] text-primary-100">Sẵn sàng bắt đầu</p>
+                <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+                  Dành 10 phút hôm nay để bớt mơ hồ hơn cho quyết định lớn ngày mai.
+                </h2>
+                <p className="mt-4 text-base leading-7 text-primary-100">
+                  Bạn không cần trả lời hoàn hảo. Chỉ cần trả lời thật với mình, MyKite sẽ giúp bạn nhìn ra một hướng đi rõ hơn.
+                </p>
+              </div>
+              <ButtonLink to="/assessments" variant="secondary" className="border-white/20 bg-white text-primary-700 hover:bg-primary-50">
+                Vào khu trắc nghiệm
+                <ArrowRightIcon />
+              </ButtonLink>
+            </div>
+          </Card>
+        </PageContainer>
       </section>
     </div>
   )
 }
 
-function FeatureCard({ icon, title, description }: { icon: string; title: string; description: string }) {
-  return (
-    <div className="text-center p-6">
-      <div className="text-4xl mb-4">{icon}</div>
-      <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
-    </div>
-  )
-}
-
-function AssessmentCard({
-  type,
+function FeatureCard({
+  icon,
   title,
   description,
-  questions,
-  time,
 }: {
-  type: 'holland' | 'bigfive'
+  icon: ReactNode
   title: string
   description: string
-  questions: number
-  time: number
 }) {
-  const colors = {
-    holland: 'from-blue-500 to-cyan-500',
-    bigfive: 'from-purple-500 to-pink-500',
-  }
-
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-      <div className={`h-2 bg-gradient-to-r ${colors[type]}`} />
-      <div className="p-6">
-        <h3 className="text-xl font-bold mb-2">{title}</h3>
-        <p className="text-gray-600 mb-4">{description}</p>
-        <div className="flex items-center gap-4 text-sm text-gray-500">
-          <span className="flex items-center gap-1">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-            </svg>
-            {questions} câu hỏi
-          </span>
-          <span className="flex items-center gap-1">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            ~{time} phút
-          </span>
-        </div>
-      </div>
-    </div>
+    <Card className="p-6 sm:p-7">
+      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-700">{icon}</div>
+      <h3 className="mt-5 text-xl font-semibold text-ink-900">{title}</h3>
+      <p className="mt-3 text-sm leading-7 text-ink-600">{description}</p>
+    </Card>
   )
 }

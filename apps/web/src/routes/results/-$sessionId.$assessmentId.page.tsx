@@ -1,16 +1,18 @@
 import { Link, useParams } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
-import { api, type Result, type Career } from '@/lib/api'
 import {
-  HOLLAND_LABELS,
-  HOLLAND_DESCRIPTIONS,
-  BIGFIVE_LABELS,
   BIGFIVE_DESCRIPTIONS,
-  type HollandDimension,
+  BIGFIVE_LABELS,
+  HOLLAND_DESCRIPTIONS,
+  HOLLAND_LABELS,
   type BigFiveDimension,
+  type HollandDimension,
 } from '@mykite/shared'
-import { HollandChart } from '@/components/HollandChart'
 import { BigFiveChart } from '@/components/BigFiveChart'
+import { HollandChart } from '@/components/HollandChart'
+import { ArrowRightIcon, CheckCircleIcon, PrintIcon } from '@/components/icons'
+import { api, type Career, type Result } from '@/lib/api'
+import { Button, ButtonLink, Card, ErrorState, LoadingState, PageContainer, Pill } from '@/components/ui'
 
 export function ResultsPage() {
   const { sessionId, assessmentId } = useParams({ from: '/results/$sessionId/$assessmentId' })
@@ -22,13 +24,18 @@ export function ResultsPage() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true)
+      setError(null)
+
       try {
         const resultData = await api.getResult(sessionId, assessmentId)
         setResult(resultData)
 
         if (resultData.assessmentType === 'holland' && resultData.resultCode) {
           const careerData = await api.getCareers(resultData.resultCode)
-          setCareers(careerData.slice(0, 10))
+          setCareers(careerData.slice(0, 8))
+        } else {
+          setCareers([])
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Có lỗi xảy ra')
@@ -38,69 +45,86 @@ export function ResultsPage() {
     }
 
     fetchData()
-  }, [sessionId, assessmentId])
+  }, [assessmentId, sessionId])
 
   if (loading) {
-    return (
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full mx-auto" />
-          <p className="mt-4 text-gray-500">Đang phân tích kết quả...</p>
-        </div>
-      </div>
-    )
+    return <LoadingState title="MyKite đang phân tích kết quả" description="Chúng mình đang gom các tín hiệu nổi bật để trả lại một bức tranh rõ ràng hơn về bạn." />
   }
 
   if (error || !result) {
     return (
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-500 text-lg">{error ?? 'Không tìm thấy kết quả'}</p>
-          <Link to="/assessments" className="mt-4 text-primary-600 hover:underline inline-block">
-            Quay lại trang trắc nghiệm
-          </Link>
-        </div>
-      </div>
+      <ErrorState
+        title="Không mở được trang kết quả"
+        description={error ?? 'Kết quả không tồn tại hoặc chưa được tạo thành công.'}
+        action={<ButtonLink to="/assessments">Quay lại khu trắc nghiệm</ButtonLink>}
+      />
     )
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <div className="text-center mb-12">
-        <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4">
-          <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
+    <div className="pb-20 pt-10 sm:pt-12">
+      <PageContainer className="max-w-5xl">
+        <ResultHero result={result} />
+
+        <div className="mt-8 space-y-6">
+          {result.assessmentType === 'holland' ? (
+            <HollandResults result={result} careers={careers} />
+          ) : (
+            <BigFiveResults result={result} />
+          )}
+
+          <Card className="p-6 sm:p-8">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-xl font-semibold text-ink-900">Bạn muốn làm gì tiếp theo?</h2>
+                <p className="mt-2 text-sm leading-6 text-ink-600">
+                  Bạn có thể làm thêm bài còn lại để bổ sung góc nhìn, hoặc in kết quả để tiện trao đổi với phụ huynh, giáo viên hay cố vấn.
+                </p>
+              </div>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <ButtonLink to="/assessments" variant="secondary">
+                  Làm bài khác
+                </ButtonLink>
+                <Button onClick={() => window.print()}>
+                  <PrintIcon className="h-4 w-4" />
+                  In kết quả
+                </Button>
+              </div>
+            </div>
+          </Card>
         </div>
-        <h1 className="text-3xl font-bold mb-2">Kết quả Trắc nghiệm</h1>
-        <p className="text-gray-600">
-          {result.assessmentType === 'holland'
-            ? 'Holland RIASEC - Sở thích Nghề nghiệp'
-            : 'Big Five OCEAN - Đặc điểm Tính cách'}
-        </p>
-      </div>
-
-      {result.assessmentType === 'holland' ? (
-        <HollandResults result={result} careers={careers} />
-      ) : (
-        <BigFiveResults result={result} />
-      )}
-
-      <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12">
-        <Link
-          to="/assessments"
-          className="px-6 py-3 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 text-center transition-colors"
-        >
-          Làm bài khác
-        </Link>
-        <button
-          onClick={() => window.print()}
-          className="px-6 py-3 rounded-xl bg-primary-600 text-white hover:bg-primary-700 transition-colors"
-        >
-          In kết quả
-        </button>
-      </div>
+      </PageContainer>
     </div>
+  )
+}
+
+function ResultHero({ result }: { result: Result }) {
+  return (
+    <Card className="overflow-hidden border-primary-100 bg-gradient-to-br from-white via-primary-50 to-cream-50 p-8 sm:p-10">
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="max-w-2xl">
+          <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-mint-100 text-primary-700">
+            <CheckCircleIcon className="h-7 w-7" />
+          </div>
+          <p className="mt-5 text-sm uppercase tracking-[0.2em] text-primary-600">Kết quả đã sẵn sàng</p>
+          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl">{result.assessmentNameVi ?? 'Kết quả trắc nghiệm của bạn'}</h1>
+          <p className="mt-4 text-base leading-7 text-ink-600">
+            {result.assessmentType === 'holland'
+              ? 'Đây là nhóm sở thích nghề nghiệp nổi bật nhất ở thời điểm hiện tại của bạn.'
+              : 'Đây là bức tranh khái quát về 5 khía cạnh tính cách cốt lõi của bạn.'}
+          </p>
+        </div>
+
+        {result.assessmentType === 'holland' && result.resultCode ? (
+          <div className="rounded-[28px] bg-primary-700 px-8 py-7 text-center text-white shadow-soft">
+            <p className="text-sm uppercase tracking-[0.18em] text-primary-100">Mã Holland</p>
+            <p className="mt-2 text-5xl font-semibold tracking-[0.18em]">{result.resultCode}</p>
+          </div>
+        ) : (
+          <Pill className="border-primary-200 bg-white text-primary-700">Big Five OCEAN</Pill>
+        )}
+      </div>
+    </Card>
   )
 }
 
@@ -109,79 +133,79 @@ function HollandResults({ result, careers }: { result: Result; careers: Career[]
   const topThree = (result.topDimensions ?? []) as HollandDimension[]
 
   return (
-    <div className="space-y-8">
-      <div className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl p-8 text-white text-center">
-        <p className="text-blue-100 mb-2">Mã Holland của bạn</p>
-        <div className="text-6xl font-bold tracking-wider mb-4">{result.resultCode}</div>
-        <p className="text-blue-100">{topThree.map((d) => HOLLAND_LABELS[d].vi).join(' - ')}</p>
-      </div>
+    <div className="space-y-6">
+      <Card className="p-6 sm:p-8">
+        <h2 className="text-2xl font-semibold text-ink-900">Bản đồ sở thích nghề nghiệp</h2>
+        <p className="mt-2 text-sm leading-6 text-ink-600">Biểu đồ cho thấy nhóm sở thích nào đang nổi bật hơn trong cách bạn tiếp cận công việc và học tập.</p>
+        <div className="mt-6">
+          <HollandChart scores={scores} />
+        </div>
+      </Card>
 
-      <div className="bg-white rounded-2xl shadow-lg p-8">
-        <h2 className="text-xl font-bold mb-6 text-center">Biểu đồ Lục giác Holland</h2>
-        <HollandChart scores={scores} />
-      </div>
-
-      <div className="bg-white rounded-2xl shadow-lg p-8">
-        <h2 className="text-xl font-bold mb-6">3 Nhóm Sở thích Chính</h2>
-        <div className="space-y-6">
-          {topThree.map((dim, idx) => (
-            <div key={dim} className="flex gap-4">
-              <div
-                className={`w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg ${
-                  idx === 0 ? 'bg-yellow-500' : idx === 1 ? 'bg-gray-400' : 'bg-amber-600'
-                }`}
-              >
-                {idx + 1}
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="font-bold text-lg">{HOLLAND_LABELS[dim].vi}</span>
-                  <span className="text-gray-400">({dim})</span>
-                  <span className="ml-auto text-primary-600 font-semibold">{scores[dim]}%</span>
+      <Card className="p-6 sm:p-8">
+        <h2 className="text-2xl font-semibold text-ink-900">3 nhóm nổi bật nhất</h2>
+        <div className="mt-6 space-y-4">
+          {topThree.map((dimension, index) => (
+            <div key={dimension} className="rounded-[24px] border border-ink-100 bg-ink-50 p-5">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-700 text-lg font-semibold text-white">
+                    {index + 1}
+                  </div>
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="text-lg font-semibold text-ink-900">{HOLLAND_LABELS[dimension].vi}</h3>
+                      <span className="text-sm text-ink-500">({dimension})</span>
+                    </div>
+                    <p className="mt-2 text-sm leading-7 text-ink-600">{HOLLAND_DESCRIPTIONS[dimension].vi}</p>
+                  </div>
                 </div>
-                <p className="text-gray-600 text-sm">{HOLLAND_DESCRIPTIONS[dim].vi}</p>
+                <Pill>{scores[dimension]}%</Pill>
               </div>
             </div>
           ))}
         </div>
-      </div>
+      </Card>
 
-      {careers.length > 0 && (
-        <div className="bg-white rounded-2xl shadow-lg p-8">
-          <h2 className="text-xl font-bold mb-6">Nghề nghiệp Gợi ý</h2>
-          <div className="grid sm:grid-cols-2 gap-4">
+      {careers.length > 0 ? (
+        <Card className="p-6 sm:p-8">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <h2 className="text-2xl font-semibold text-ink-900">Nhóm nghề bạn có thể tham khảo</h2>
+              <p className="mt-2 text-sm leading-6 text-ink-600">Đây là các lựa chọn gần với mã Holland của bạn để bắt đầu tìm hiểu sâu hơn.</p>
+            </div>
+          </div>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
             {careers.map((career) => (
-              <div
-                key={career.id}
-                className="p-4 rounded-xl border border-gray-200 hover:border-primary-300 hover:bg-primary-50 transition-colors"
-              >
-                <div className="flex items-start justify-between">
+              <div key={career.id} className="rounded-[24px] border border-ink-100 bg-white p-5 shadow-card">
+                <div className="flex items-start justify-between gap-3">
                   <div>
-                    <h3 className="font-semibold">{career.nameVi}</h3>
-                    <p className="text-sm text-gray-500">{career.nameEn}</p>
+                    <h3 className="font-semibold text-ink-900">{career.nameVi}</h3>
+                    {career.nameEn ? <p className="mt-1 text-sm text-ink-500">{career.nameEn}</p> : null}
                   </div>
-                  {career.futureOutlook === 'high' && (
-                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-                      Xu hướng cao
-                    </span>
-                  )}
+                  {career.futureOutlook === 'high' ? <Pill className="bg-mint-100 text-primary-700">Xu hướng cao</Pill> : null}
                 </div>
-                {career.matchScore > 0 && (
-                  <div className="mt-2">
-                    <div className="text-xs text-gray-500 mb-1">Độ phù hợp</div>
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+
+                {career.matchScore > 0 ? (
+                  <div className="mt-4">
+                    <div className="mb-2 flex items-center justify-between text-sm text-ink-600">
+                      <span>Độ phù hợp</span>
+                      <span className="font-medium text-ink-900">{Math.min(career.matchScore, 100)}%</span>
+                    </div>
+                    <div className="h-2 overflow-hidden rounded-full bg-primary-100">
                       <div
-                        className="h-full bg-primary-500 rounded-full"
+                        className="h-full rounded-full bg-gradient-to-r from-primary-500 to-primary-700"
                         style={{ width: `${Math.min(career.matchScore, 100)}%` }}
                       />
                     </div>
                   </div>
-                )}
+                ) : null}
               </div>
             ))}
           </div>
-        </div>
-      )}
+        </Card>
+      ) : null}
     </div>
   )
 }
@@ -189,48 +213,61 @@ function HollandResults({ result, careers }: { result: Result; careers: Career[]
 function BigFiveResults({ result }: { result: Result }) {
   const scores = result.scores as Record<BigFiveDimension, number>
 
-  const getLevel = (score: number): { label: string; color: string } => {
-    if (score < 34) return { label: 'Thấp', color: 'text-blue-600' }
-    if (score > 66) return { label: 'Cao', color: 'text-green-600' }
-    return { label: 'Trung bình', color: 'text-yellow-600' }
-  }
-
   return (
-    <div className="space-y-8">
-      <div className="bg-white rounded-2xl shadow-lg p-8">
-        <h2 className="text-xl font-bold mb-6 text-center">Biểu đồ Big Five</h2>
-        <BigFiveChart scores={scores} />
-      </div>
+    <div className="space-y-6">
+      <Card className="p-6 sm:p-8">
+        <h2 className="text-2xl font-semibold text-ink-900">Biểu đồ 5 khía cạnh tính cách</h2>
+        <p className="mt-2 text-sm leading-6 text-ink-600">Các điểm số không nói bạn tốt hay chưa tốt. Chúng chỉ cho thấy xu hướng tính cách đang nổi bật hơn ở bạn.</p>
+        <div className="mt-6">
+          <BigFiveChart scores={scores} />
+        </div>
+      </Card>
 
-      <div className="bg-white rounded-2xl shadow-lg p-8">
-        <h2 className="text-xl font-bold mb-6">Chi tiết 5 Khía cạnh Tính cách</h2>
-        <div className="space-y-6">
-          {(Object.keys(scores) as BigFiveDimension[]).map((dim) => {
-            const level = getLevel(scores[dim])
+      <Card className="p-6 sm:p-8">
+        <h2 className="text-2xl font-semibold text-ink-900">Diễn giải từng khía cạnh</h2>
+        <div className="mt-6 space-y-5">
+          {(Object.keys(scores) as BigFiveDimension[]).map((dimension) => {
+            const level = getLevel(scores[dimension])
+
             return (
-              <div key={dim}>
-                <div className="flex items-center justify-between mb-2">
+              <div key={dimension} className="rounded-[24px] border border-ink-100 bg-ink-50 p-5">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <span className="font-semibold">{BIGFIVE_LABELS[dim].vi}</span>
-                    <span className="text-gray-400 ml-2">({BIGFIVE_LABELS[dim].en})</span>
+                    <h3 className="text-lg font-semibold text-ink-900">{BIGFIVE_LABELS[dimension].vi}</h3>
+                    <p className="mt-1 text-sm text-ink-500">{BIGFIVE_LABELS[dimension].en}</p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className={`text-sm font-medium ${level.color}`}>{level.label}</span>
-                    <span className="font-bold text-primary-600">{scores[dim]}%</span>
+                  <div className="flex items-center gap-3">
+                    <Pill>{level}</Pill>
+                    <span className="text-lg font-semibold text-primary-700">{scores[dimension]}%</span>
                   </div>
                 </div>
-                <div className="h-3 bg-gray-200 rounded-full overflow-hidden mb-2">
+                <div className="mt-4 h-3 overflow-hidden rounded-full bg-primary-100">
                   <div
-                    className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all"
-                    style={{ width: `${scores[dim]}%` }}
+                    className="h-full rounded-full bg-gradient-to-r from-primary-400 to-primary-700"
+                    style={{ width: `${scores[dimension]}%` }}
                   />
                 </div>
-                <p className="text-sm text-gray-600">{BIGFIVE_DESCRIPTIONS[dim].vi}</p>
+                <p className="mt-4 text-sm leading-7 text-ink-600">{BIGFIVE_DESCRIPTIONS[dimension].vi}</p>
               </div>
             )
           })}
         </div>
-      </div>
+      </Card>
+
+      <Card className="border-primary-100 bg-primary-50 p-6 sm:p-8">
+        <h2 className="text-2xl font-semibold text-ink-900">Gợi ý bước tiếp theo</h2>
+        <ul className="mt-4 space-y-3 text-sm leading-7 text-ink-600">
+          <li>Đối chiếu kết quả với cách bạn học và làm việc thực tế gần đây.</li>
+          <li>Nếu cần thêm góc nhìn về nghề phù hợp, hãy làm thêm bài Holland RIASEC.</li>
+          <li>Ghi lại 2-3 điểm khiến bạn thấy “đúng với mình nhất” để dùng cho bước định hướng tiếp theo.</li>
+        </ul>
+      </Card>
     </div>
   )
+}
+
+function getLevel(score: number) {
+  if (score < 34) return 'Thấp'
+  if (score > 66) return 'Cao'
+  return 'Trung bình'
 }

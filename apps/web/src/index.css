@@ -3,11 +3,42 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: #0ea5e9;
+  font-family: 'Poppins', system-ui, sans-serif;
+  color: #202332;
+  background: #f7f7fb;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('./assets/brand/Poppins-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('./assets/brand/Poppins-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  @apply bg-gray-50 text-gray-900 antialiased;
+  @apply bg-ink-50 text-ink-800 antialiased;
+}
+
+a,
+button {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-2;
+}
+
+#root {
+  min-height: 100vh;
 }
 
 /* Custom scrollbar */
@@ -16,13 +47,13 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100;
+  @apply bg-ink-100;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 rounded-full;
+  @apply bg-primary-200 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400;
+  @apply bg-primary-300;
 }

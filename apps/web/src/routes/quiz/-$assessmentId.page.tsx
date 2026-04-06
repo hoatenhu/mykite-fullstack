@@ -1,36 +1,40 @@
 import { useNavigate, useParams } from '@tanstack/react-router'
-import { useEffect, useState, useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { LIKERT5_OPTIONS } from '@mykite/shared'
 import { api, type AssessmentWithQuestions, type Question } from '@/lib/api'
 import { useSessionStore, useQuizStore } from '@/lib/store'
-import { LIKERT5_OPTIONS } from '@mykite/shared'
+import { ArrowRightIcon, CheckCircleIcon, ClockIcon } from '@/components/icons'
+import { Button, Card, ErrorState, LoadingState, PageContainer, Pill, ProgressBar } from '@/components/ui'
 
 export function QuizPage() {
   const { assessmentId } = useParams({ from: '/quiz/$assessmentId' })
   const navigate = useNavigate()
 
   const { sessionId, setSession } = useSessionStore()
-  const {
-    currentQuestionIndex,
-    responses,
-    setResponse,
-    nextQuestion,
-    prevQuestion,
-    reset,
-  } = useQuizStore()
+  const { currentQuestionIndex, responses, setResponse, nextQuestion, prevQuestion, reset } = useQuizStore()
 
   const [data, setData] = useState<AssessmentWithQuestions | null>(null)
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
 
-  useEffect(() => {
+  const loadAssessment = useCallback(() => {
+    setLoading(true)
+    setError(null)
+    setNotice(null)
     reset()
+
     api
       .getAssessmentQuestions(assessmentId)
       .then(setData)
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false))
   }, [assessmentId, reset])
+
+  useEffect(() => {
+    loadAssessment()
+  }, [loadAssessment])
 
   useEffect(() => {
     if (!sessionId) {
@@ -44,11 +48,13 @@ export function QuizPage() {
     if (!data || !sessionId) return
 
     if (responses.size < data.questions.length) {
-      alert('Vui lòng trả lời tất cả các câu hỏi')
+      setNotice('Bạn cần trả lời hết các câu để MyKite phân tích kết quả chính xác.')
       return
     }
 
+    setNotice(null)
     setSubmitting(true)
+
     try {
       await api.submitAssessment({
         sessionId,
@@ -64,179 +70,207 @@ export function QuizPage() {
         params: { sessionId, assessmentId },
       })
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Có lỗi xảy ra')
+      setError(err instanceof Error ? err.message : 'Có lỗi xảy ra khi nộp bài')
     } finally {
       setSubmitting(false)
     }
-  }, [data, sessionId, assessmentId, responses, navigate])
+  }, [assessmentId, data, navigate, responses, sessionId])
 
-  if (loading) return <LoadingState />
-  if (error || !data) return <ErrorState error={error ?? 'Không tải được dữ liệu'} />
+  if (loading) {
+    return <LoadingState title="Đang chuẩn bị câu hỏi" description="MyKite đang xếp sẵn không gian làm bài để bạn bắt đầu thuận hơn." />
+  }
+
+  if (error || !data) {
+    return (
+      <ErrorState
+        title="Chưa thể mở bài trắc nghiệm"
+        description={error ?? 'Không tải được dữ liệu câu hỏi.'}
+        action={<Button onClick={loadAssessment}>Tải lại bài</Button>}
+      />
+    )
+  }
 
   const questions = data.questions
   const currentQuestion = questions[currentQuestionIndex]
-  const progress = ((currentQuestionIndex + 1) / questions.length) * 100
-  const isLastQuestion = currentQuestionIndex === questions.length - 1
   const currentAnswer = currentQuestion ? responses.get(currentQuestion.id) : undefined
+  const completedCount = responses.size
+  const progress = (completedCount / questions.length) * 100
+  const isLastQuestion = currentQuestionIndex === questions.length - 1
+
+  if (!currentQuestion) {
+    return (
+      <ErrorState
+        title="Không tìm thấy câu hỏi hiện tại"
+        description="Dữ liệu bài làm có vẻ chưa đồng bộ. Bạn có thể tải lại bài để tiếp tục."
+        action={<Button onClick={loadAssessment}>Tải lại bài</Button>}
+      />
+    )
+  }
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-gray-50">
-      <div className="bg-white border-b sticky top-16 z-40">
-        <div className="max-w-3xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
-            <span>{data.assessment.nameVi}</span>
-            <span>
-              {currentQuestionIndex + 1} / {questions.length}
-            </span>
-          </div>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-primary-500 to-primary-600 transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-        </div>
-      </div>
+    <div className="pb-20 pt-8 sm:pt-10">
+      <PageContainer className="max-w-5xl">
+        <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
+          <Card className="p-6 sm:p-7 lg:sticky lg:top-28">
+            <Pill>{data.assessment.type === 'holland' ? 'Hướng nghiệp' : 'Tính cách'}</Pill>
+            <h1 className="mt-4 text-3xl font-semibold tracking-tight text-ink-900">{data.assessment.nameVi}</h1>
+            <p className="mt-3 text-sm leading-7 text-ink-600">
+              Trả lời theo cảm nhận thật của bạn ở thời điểm hiện tại. Không có đáp án đúng tuyệt đối.
+            </p>
 
-      <div className="max-w-3xl mx-auto px-4 py-12">
-        {currentQuestion && (
-          <QuestionCard
-            question={currentQuestion}
-            questionNumber={currentQuestionIndex + 1}
-            selectedValue={currentAnswer}
-            onSelect={(value) => setResponse(currentQuestion.id, value)}
-          />
-        )}
+            <div className="mt-6 space-y-4 rounded-[24px] bg-ink-50 p-5">
+              <div className="flex items-center justify-between text-sm text-ink-600">
+                <span>Tiến độ hoàn thành</span>
+                <span className="font-medium text-ink-900">{completedCount}/{questions.length} câu</span>
+              </div>
+              <ProgressBar value={progress} />
+              <div className="flex flex-wrap gap-2 text-sm text-ink-600">
+                <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2">
+                  <ClockIcon className="h-4 w-4" />
+                  <span>Khoảng {Math.ceil(questions.length / 6)} phút còn lại</span>
+                </div>
+                <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2">
+                  <CheckCircleIcon className="h-4 w-4" />
+                  <span>{currentQuestionIndex + 1} / {questions.length}</span>
+                </div>
+              </div>
+            </div>
 
-        <div className="flex items-center justify-between mt-8">
-          <button
-            onClick={prevQuestion}
-            disabled={currentQuestionIndex === 0}
-            className="px-6 py-3 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            ← Câu trước
-          </button>
+            <div className="mt-6">
+              <p className="text-sm font-medium text-ink-900">Bản đồ câu hỏi</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {questions.map((question, index) => {
+                  const isAnswered = responses.has(question.id)
+                  const isCurrent = index === currentQuestionIndex
 
-          {isLastQuestion ? (
-            <button
-              onClick={handleSubmit}
-              disabled={submitting || responses.size < questions.length}
-              className="px-8 py-3 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 text-white font-semibold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-            >
-              {submitting ? 'Đang xử lý...' : 'Nộp bài & Xem kết quả'}
-            </button>
-          ) : (
-            <button
-              onClick={nextQuestion}
-              disabled={!currentAnswer}
-              className="px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              Câu tiếp →
-            </button>
-          )}
-        </div>
+                  return (
+                    <button
+                      key={question.id}
+                      type="button"
+                      onClick={() => useQuizStore.getState().goToQuestion(index)}
+                      className={[
+                        'flex h-10 w-10 items-center justify-center rounded-2xl text-sm font-medium transition',
+                        isCurrent && 'bg-primary-700 text-white shadow-soft',
+                        !isCurrent && isAnswered && 'bg-primary-100 text-primary-700 hover:bg-primary-200',
+                        !isCurrent && !isAnswered && 'bg-ink-100 text-ink-500 hover:bg-ink-200',
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
+                    >
+                      {index + 1}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          </Card>
 
-        <div className="flex flex-wrap justify-center gap-2 mt-8">
-          {questions.map((q, idx) => {
-            const isAnswered = responses.has(q.id)
-            const isCurrent = idx === currentQuestionIndex
+          <div className="space-y-5">
+            <Card className="p-6 sm:p-8">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary-600">Câu hỏi {currentQuestionIndex + 1}</p>
+                  <h2 className="mt-3 text-2xl font-semibold leading-tight text-ink-900 sm:text-[2rem]">{currentQuestion.textVi}</h2>
+                </div>
+                <Pill className="bg-cream-100 text-primary-700">Trả lời theo mức độ đúng với bạn</Pill>
+              </div>
 
-            return (
-              <button
-                key={q.id}
-                onClick={() => useQuizStore.getState().goToQuestion(idx)}
-                className={`w-8 h-8 rounded-full text-xs font-medium transition-all ${
-                  isCurrent
-                    ? 'bg-primary-600 text-white ring-2 ring-primary-300'
-                    : isAnswered
-                    ? 'bg-primary-100 text-primary-700'
-                    : 'bg-gray-200 text-gray-500 hover:bg-gray-300'
-                }`}
-              >
-                {idx + 1}
-              </button>
-            )
-          })}
-        </div>
-      </div>
-    </div>
-  )
-}
+              {notice ? (
+                <div className="mt-6 rounded-2xl border border-cream-200 bg-cream-100 px-4 py-3 text-sm leading-6 text-primary-800">
+                  {notice}
+                </div>
+              ) : null}
 
-function QuestionCard({
-  question,
-  questionNumber,
-  selectedValue,
-  onSelect,
-}: {
-  question: Question
-  questionNumber: number
-  selectedValue?: number
-  onSelect: (value: number) => void
-}) {
-  return (
-    <div className="bg-white rounded-2xl shadow-lg p-8">
-      <div className="text-sm text-primary-600 font-medium mb-2">Câu hỏi {questionNumber}</div>
-      <h2 className="text-xl md:text-2xl font-semibold mb-8">{question.textVi}</h2>
+              <div className="mt-8 space-y-3">
+                {LIKERT5_OPTIONS.map((option) => (
+                  <OptionButton
+                    key={option.value}
+                    option={option}
+                    selected={currentAnswer === option.value}
+                    onClick={() => {
+                      setNotice(null)
+                      onSelectAnswer(currentQuestion.id, option.value, setResponse)
+                    }}
+                  />
+                ))}
+              </div>
+            </Card>
 
-      <div className="space-y-3">
-        {LIKERT5_OPTIONS.map((option) => (
-          <button
-            key={option.value}
-            onClick={() => onSelect(option.value)}
-            className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
-              selectedValue === option.value
-                ? 'border-primary-500 bg-primary-50 text-primary-700'
-                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-            }`}
-          >
-            <div className="flex items-center gap-4">
-              <div
-                className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                  selectedValue === option.value
-                    ? 'border-primary-500 bg-primary-500'
-                    : 'border-gray-300'
-                }`}
-              >
-                {selectedValue === option.value && (
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+            <Card className="p-5 sm:p-6">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <Button variant="secondary" onClick={prevQuestion} disabled={currentQuestionIndex === 0}>
+                  Câu trước
+                </Button>
+
+                {isLastQuestion ? (
+                  <Button onClick={handleSubmit} disabled={submitting || responses.size < questions.length} className="sm:min-w-[220px]">
+                    {submitting ? 'Đang xử lý...' : 'Nộp bài và xem kết quả'}
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={nextQuestion}
+                    disabled={!currentAnswer}
+                    className="sm:min-w-[180px]"
+                  >
+                    Câu tiếp theo
+                    <ArrowRightIcon />
+                  </Button>
                 )}
               </div>
-              <span className="font-medium">{option.vi}</span>
-            </div>
-          </button>
-        ))}
-      </div>
+            </Card>
+          </div>
+        </div>
+      </PageContainer>
     </div>
   )
 }
 
-function LoadingState() {
-  return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-      <div className="text-center">
-        <div className="animate-spin w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full mx-auto" />
-        <p className="mt-4 text-gray-500">Đang tải câu hỏi...</p>
-      </div>
-    </div>
-  )
+function onSelectAnswer(
+  questionId: string,
+  value: number,
+  setResponse: (questionId: string, value: number) => void
+) {
+  setResponse(questionId, value)
 }
 
-function ErrorState({ error }: { error: string }) {
+function OptionButton({
+  option,
+  selected,
+  onClick,
+}: {
+  option: (typeof LIKERT5_OPTIONS)[number]
+  selected: boolean
+  onClick: () => void
+}) {
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-      <div className="text-center">
-        <p className="text-red-500 text-lg">{error}</p>
-        <button onClick={() => window.location.reload()} className="mt-4 text-primary-600 hover:underline">
-          Thử lại
-        </button>
+    <button
+      type="button"
+      onClick={onClick}
+      className={[
+        'w-full rounded-[24px] border p-4 text-left transition sm:p-5',
+        selected
+          ? 'border-primary-300 bg-primary-50 shadow-soft'
+          : 'border-ink-100 bg-white hover:border-primary-200 hover:bg-primary-50/50',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+    >
+      <div className="flex items-center gap-4">
+        <div
+          className={[
+            'flex h-10 w-10 items-center justify-center rounded-full border text-sm font-medium transition',
+            selected ? 'border-primary-700 bg-primary-700 text-white' : 'border-ink-200 text-ink-500',
+          ]
+            .filter(Boolean)
+            .join(' ')}
+        >
+          {option.value}
+        </div>
+        <div>
+          <p className="font-medium text-ink-900">{option.vi}</p>
+          <p className="mt-1 text-sm text-ink-500">{option.en}</p>
+        </div>
       </div>
-    </div>
+    </button>
   )
 }
