@@ -319,7 +319,7 @@ export function QuizPage() {
                 </div>
               </div>
             </div>
-            
+
             <div className="border-t border-ink-100 p-8 pt-6">
               <div className="flex flex-wrap justify-center gap-2.5">
                 {questions.map((question, index) => {

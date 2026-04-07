@@ -109,7 +109,7 @@ export function ResultsPage() {
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width
 
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
-      
+
       clearInterval(progressInterval)
       setDownloadProgress(100)
 
@@ -118,7 +118,7 @@ export function ResultsPage() {
         pdf.save(`MyKite-BaoCao-${result.assessmentType}.pdf`)
         setDownloading(false)
       }, 400)
-      
+
     } catch (err) {
       alert('Có lỗi xảy ra khi tải báo cáo, vui lòng thử lại sau.')
       console.error(err)
@@ -171,14 +171,14 @@ export function ResultsPage() {
             <p className="mt-2 text-sm text-ink-500">
               Vui lòng đợi vài giây để hệ thống tổng hợp dữ liệu thành file PDF chất lượng cao.
             </p>
-            
+
             <div className="mt-8">
               <div className="flex justify-between text-xs font-bold uppercase tracking-wider text-ink-500 mb-2">
                 <span>Tiến trình tải</span>
                 <span className="text-primary-600 font-extrabold">{downloadProgress}%</span>
               </div>
               <div className="h-2 w-full overflow-hidden rounded-full bg-ink-100">
-                <div 
+                <div
                   className="h-full bg-gradient-to-r from-primary-400 to-primary-600 transition-all duration-300 ease-out"
                   style={{ width: `${downloadProgress}%` }}
                 />

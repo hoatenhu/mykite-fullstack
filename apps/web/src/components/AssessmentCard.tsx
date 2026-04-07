@@ -61,11 +61,10 @@ export function AssessmentCard({
         <Link
           to="/quiz/$assessmentId"
           params={{ assessmentId: assessment.id }}
-          className={`mt-8 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-bold transition-all duration-300 active:scale-95 shadow-soft hover:shadow-primary-300/30 sm:w-auto ${
-            assessment.type === 'holland' 
-            ? 'bg-primary-700 text-white hover:bg-primary-800' 
-            : 'bg-indigo-900 text-white hover:bg-indigo-950'
-          }`}
+          className={`mt-8 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-bold transition-all duration-300 active:scale-95 shadow-soft hover:shadow-primary-300/30 sm:w-auto ${assessment.type === 'holland'
+              ? 'bg-primary-700 text-white hover:bg-primary-800'
+              : 'bg-indigo-900 text-white hover:bg-indigo-950'
+            }`}
         >
           Bắt đầu làm bài
         </Link>

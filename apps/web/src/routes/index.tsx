@@ -91,7 +91,7 @@ function HomePage() {
                       <h3 className="text-xl font-bold text-ink-900">Nhóm Nghiên cứu</h3>
                     </div>
                   </div>
-                  
+
                   <div className="mt-8 space-y-5">
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
@@ -102,7 +102,7 @@ function HomePage() {
                         <div className="h-full rounded-full bg-gradient-to-r from-primary-500 to-primary-700" style={{ width: '85%' }} />
                       </div>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
                         <span className="font-medium text-ink-600">Khả năng Phân tích</span>
@@ -148,23 +148,23 @@ function HomePage() {
             align="center"
           />
 
-      <div className="mt-10 grid gap-8 lg:grid-cols-3">
-        <FeatureCard
-          icon={<SparkIcon className="h-6 w-6" />}
-          title="Diễn giải dễ hiểu"
-          description="Kết quả viết theo ngôn ngữ gần gũi để học sinh, phụ huynh và cố vấn đều có thể đọc được ngay."
-        />
-        <FeatureCard
-          icon={<HeartHandshakeIcon className="h-6 w-6" />}
-          title="Thân thiện nhưng không hời hợt"
-          description="Visual trẻ trung, mềm mại, nhưng vẫn giữ đủ độ tin cậy cho một công cụ định hướng học tập và nghề nghiệp."
-        />
-        <FeatureCard
-          icon={<ArrowRightIcon className="h-6 w-6" />}
-          title="Biết bước tiếp theo"
-          description="Sau kết quả, bạn có thể tiếp tục nhìn vào nhóm nghề gợi ý, điểm mạnh nổi bật và hướng phát triển phù hợp."
-        />
-      </div>
+          <div className="mt-10 grid gap-8 lg:grid-cols-3">
+            <FeatureCard
+              icon={<SparkIcon className="h-6 w-6" />}
+              title="Diễn giải dễ hiểu"
+              description="Kết quả viết theo ngôn ngữ gần gũi để học sinh, phụ huynh và cố vấn đều có thể đọc được ngay."
+            />
+            <FeatureCard
+              icon={<HeartHandshakeIcon className="h-6 w-6" />}
+              title="Thân thiện nhưng không hời hợt"
+              description="Visual trẻ trung, mềm mại, nhưng vẫn giữ đủ độ tin cậy cho một công cụ định hướng học tập và nghề nghiệp."
+            />
+            <FeatureCard
+              icon={<ArrowRightIcon className="h-6 w-6" />}
+              title="Biết bước tiếp theo"
+              description="Sau kết quả, bạn có thể tiếp tục nhìn vào nhóm nghề gợi ý, điểm mạnh nổi bật và hướng phát triển phù hợp."
+            />
+          </div>
         </PageContainer>
       </section>
 
@@ -181,7 +181,7 @@ function HomePage() {
             description="Holland giúp bạn nhìn thấy kiểu nghề phù hợp. Big Five giúp bạn hiểu cách mình học, hợp tác và xử lý áp lực."
             align="center"
           />
-          
+
           <div className="mt-16 grid gap-8 lg:grid-cols-2">
             {featuredAssessments.map((assessment) => (
               <AssessmentCard key={assessment.id} assessment={assessment} />
@@ -195,7 +195,7 @@ function HomePage() {
           <div className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-primary-800 via-primary-700 to-indigo-900 p-8 shadow-card sm:p-12 lg:p-14">
             <div className="absolute -left-24 -top-24 h-64 w-64 rounded-full bg-primary-600/20 blur-3xl" />
             <div className="absolute -bottom-12 -right-12 h-48 w-48 rounded-full bg-cream-400/10 blur-2xl" />
-            
+
             <div className="relative flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
               <div className="max-w-2xl">
                 <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-primary-100 backdrop-blur-md">
