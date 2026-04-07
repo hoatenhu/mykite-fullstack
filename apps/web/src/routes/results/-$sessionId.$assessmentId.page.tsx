@@ -127,8 +127,9 @@ export function ResultsPage() {
   }
 
   return (
-    <div className="pb-20 pt-10 sm:pt-12" id="report-content">
-      <PageContainer className="max-w-5xl">
+    <>
+      <div className="pb-20 pt-10 sm:pt-12" id="report-content">
+        <PageContainer className="max-w-5xl">
         <ResultHero result={result} />
 
         <div className="mt-8 space-y-6">
@@ -159,6 +160,7 @@ export function ResultsPage() {
           </Card>
         </div>
       </PageContainer>
+      </div>
 
       {/* Download Progress Modal */}
       {downloading && (
@@ -187,7 +189,7 @@ export function ResultsPage() {
           </div>
         </div>
       )}
-    </div>
+    </>
   )
 }
 
