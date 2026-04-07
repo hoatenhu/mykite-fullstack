@@ -7,6 +7,7 @@ import assessments from './routes/assessments'
 import sessions from './routes/sessions'
 import results from './routes/results'
 import careers from './routes/careers'
+import payments from './routes/payments'
 
 const app = new Hono()
 
@@ -39,6 +40,7 @@ app.route('/api/assessments', assessments)
 app.route('/api/sessions', sessions)
 app.route('/api/results', results)
 app.route('/api/careers', careers)
+app.route('/api/payments', payments)
 
 // 404 handler
 app.notFound((c) => {

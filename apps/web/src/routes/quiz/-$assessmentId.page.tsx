@@ -1,39 +1,46 @@
 import { useNavigate, useParams } from '@tanstack/react-router'
-import { useEffect, useState, useCallback, Suspense } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { LIKERT5_OPTIONS } from '@mykite/shared'
 import { api, type AssessmentWithQuestions, type Question } from '@/lib/api'
 import { useSessionStore, useQuizStore } from '@/lib/store'
-import { LIKERT5_OPTIONS } from '@mykite/shared'
-import { Canvas } from '@react-three/fiber'
-import { SpaceScene } from '@/components/ui/SpaceScene'
+import { ArrowRightIcon, CheckCircleIcon, ClockIcon, SparkIcon } from '@/components/icons'
+import { Button, Card, ErrorState, LoadingState, PageContainer, Pill, ProgressBar } from '@/components/ui'
+
+function cx(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(' ')
+}
 
 export function QuizPage() {
   const { assessmentId } = useParams({ from: '/quiz/$assessmentId' })
   const navigate = useNavigate()
 
   const { sessionId, setSession } = useSessionStore()
-  const {
-    currentQuestionIndex,
-    responses,
-    setResponse,
-    nextQuestion,
-    prevQuestion,
-    reset,
-  } = useQuizStore()
+  const { currentQuestionIndex, responses, setResponse, nextQuestion, prevQuestion, reset } = useQuizStore()
 
   const [data, setData] = useState<AssessmentWithQuestions | null>(null)
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [isWarping, setIsWarping] = useState(false)
+  const [notice, setNotice] = useState<string | null>(null)
+  const [showHalfwayNotice, setShowHalfwayNotice] = useState(false)
+  const [hasShownHalfwayNotice, setHasShownHalfwayNotice] = useState(false)
 
-  useEffect(() => {
+  const loadAssessment = useCallback(() => {
+    setLoading(true)
+    setError(null)
+    setNotice(null)
     reset()
+
     api
       .getAssessmentQuestions(assessmentId)
       .then(setData)
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false))
   }, [assessmentId, reset])
+
+  useEffect(() => {
+    loadAssessment()
+  }, [loadAssessment])
 
   useEffect(() => {
     if (!sessionId) {
@@ -43,44 +50,46 @@ export function QuizPage() {
     }
   }, [sessionId, setSession])
 
-  const handleNext = () => {
-    setIsWarping(true)
-    setTimeout(() => {
-      nextQuestion()
-      setIsWarping(false)
-    }, 1000)
-  }
+  // const handleNext = () => {
+  //   setIsWarping(true)
+  //   setTimeout(() => {
+  //     nextQuestion()
+  //     setIsWarping(false)
+  //   }, 1000)
+  // }
 
-  const handlePrev = () => {
-    setIsWarping(true)
-    setTimeout(() => {
-      prevQuestion()
-      setIsWarping(false)
-    }, 1000)
-  }
+  // const handlePrev = () => {
+  //   setIsWarping(true)
+  //   setTimeout(() => {
+  //     prevQuestion()
+  //     setIsWarping(false)
+  //   }, 1000)
+  // }
 
-  const handleGoTo = (idx: number) => {
-    if (idx === currentQuestionIndex) return;
-    setIsWarping(true)
-    setTimeout(() => {
-      useQuizStore.getState().goToQuestion(idx)
-      setIsWarping(false)
-    }, 1000)
-  }
+  // const handleGoTo = (idx: number) => {
+  //   if (idx === currentQuestionIndex) return;
+  //   setIsWarping(true)
+  //   setTimeout(() => {
+  //     useQuizStore.getState().goToQuestion(idx)
+  //     setIsWarping(false)
+  //   }, 1000)
+  // }
 
   const handleSubmit = useCallback(async () => {
     if (!data || !sessionId) return
 
     if (responses.size < data.questions.length) {
-      alert('Vui lòng trả lời tất cả các câu hỏi')
+      setNotice('Bạn cần trả lời hết các câu để MyKite phân tích kết quả chính xác.')
       return
     }
 
+    setNotice(null)
     setSubmitting(true)
+
     try {
       await api.submitAssessment({
         sessionId,
-        assessmentId,
+        assessmentId: data.assessment.id,
         responses: Array.from(responses.entries()).map(([questionId, value]) => ({
           questionId,
           value,
@@ -89,203 +98,383 @@ export function QuizPage() {
 
       navigate({
         to: '/results/$sessionId/$assessmentId',
-        params: { sessionId, assessmentId },
+        params: { sessionId, assessmentId: data.assessment.id },
       })
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Có lỗi xảy ra')
+      setError(err instanceof Error ? err.message : 'Có lỗi xảy ra khi nộp bài')
     } finally {
       setSubmitting(false)
     }
-  }, [data, sessionId, assessmentId, responses, navigate])
+  }, [assessmentId, data, navigate, responses, sessionId])
 
-  if (loading) return <LoadingState />
-  if (error || !data) return <ErrorState error={error ?? 'Không tải được dữ liệu'} />
-
-  const questions = data.questions
+  const questions = data?.questions ?? []
   const currentQuestion = questions[currentQuestionIndex]
-  const progress = ((currentQuestionIndex + 1) / questions.length) * 100
-  const isLastQuestion = currentQuestionIndex === questions.length - 1
   const currentAnswer = currentQuestion ? responses.get(currentQuestion.id) : undefined
+  const completedCount = responses.size
+  const progress = questions.length > 0 ? (completedCount / questions.length) * 100 : 0
+  const isLastQuestion = currentQuestionIndex === questions.length - 1
+
+  // Handle halfway milestone
+  useEffect(() => {
+    if (!hasShownHalfwayNotice && progress >= 50 && progress < 60 && questions.length > 4) {
+      setShowHalfwayNotice(true)
+      setHasShownHalfwayNotice(true)
+      // Auto hide after 4 seconds
+      const timer = setTimeout(() => setShowHalfwayNotice(false), 4000)
+      return () => clearTimeout(timer)
+    }
+  }, [progress, hasShownHalfwayNotice, questions.length])
+
+  if (loading) {
+    return <LoadingState title="Đang chuẩn bị câu hỏi" description="MyKite đang xếp sẵn không gian làm bài để bạn bắt đầu thuận hơn." />
+  }
+
+  if (error || !data) {
+    return (
+      <ErrorState
+        title="Chưa thể mở bài trắc nghiệm"
+        description={error ?? 'Không tải được dữ liệu câu hỏi.'}
+        action={<Button onClick={loadAssessment}>Tải lại bài</Button>}
+      />
+    )
+  }
+
+  const handleSelectAnswer = (questionId: string, value: number) => {
+    setNotice(null)
+    setResponse(questionId, value)
+
+    // Auto next logic with small delay for visual feedback
+    if (!isLastQuestion) {
+      setTimeout(() => {
+        nextQuestion()
+      }, 400)
+    }
+  }
+
+  if (!currentQuestion) {
+    return (
+      <ErrorState
+        title="Không tìm thấy câu hỏi hiện tại"
+        description="Dữ liệu bài làm có vẻ chưa đồng bộ. Bạn có thể tải lại bài để tiếp tục."
+        action={<Button onClick={loadAssessment}>Tải lại bài</Button>}
+      />
+    )
+  }
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] relative overflow-hidden bg-[#0a0a0a] border-none">
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <Canvas camera={{ position: [0, 0, 10], fov: 75 }}>
-          <Suspense fallback={null}>
-            <SpaceScene isWarping={isWarping} />
-          </Suspense>
-        </Canvas>
-      </div>
-
-      <div className="relative z-10 w-full min-h-[calc(100vh-4rem)] flex flex-col">
-        <div className="backdrop-blur-md bg-black/40 border-b border-white/5 sticky top-16 z-40">
-          <div className="max-w-3xl mx-auto px-4 py-4">
-            <div className="flex items-center justify-between text-sm text-gray-400 mb-2">
-              <span>{data.assessment.nameVi}</span>
-              <span>
-                {currentQuestionIndex + 1} / {questions.length}
-              </span>
+    <div className="min-h-screen bg-ink-50/30 pb-12">
+      {/* Sticky Progress Header */}
+      <header className="sticky top-0 z-30 w-full border-b border-ink-100 bg-white/80 backdrop-blur-md">
+        <PageContainer className="max-w-4xl py-3 sm:py-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-700 text-white shadow-soft">
+                <SparkIcon className="h-6 w-6" />
+              </div>
+              <div className="hidden sm:block">
+                <p className="text-xs font-bold uppercase tracking-widest text-ink-400">Đang thực hiện</p>
+                <h3 className="text-sm font-bold text-ink-900 truncate max-w-[200px]">{data.assessment.nameVi}</h3>
+              </div>
             </div>
-            <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-primary-400 to-primary-500 transition-all duration-300 shadow-[0_0_10px_rgba(14,165,233,0.5)]"
-                style={{ width: `${progress}%` }}
-              />
+
+            <div className="flex flex-1 max-w-md flex-col gap-1.5">
+              <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-ink-500">
+                <span>Tiến độ bài làm</span>
+                <span className="text-primary-700">{completedCount}/{questions.length} câu</span>
+              </div>
+              <div className="h-2 w-full overflow-hidden rounded-full bg-ink-100">
+                <div
+                  className="h-full bg-gradient-to-r from-primary-600 to-indigo-600 transition-all duration-500 ease-out"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            </div>
+
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-ink-100 text-ink-600 sm:w-auto sm:px-3 sm:gap-2">
+              <ClockIcon className="h-5 w-5" />
+              <span className="hidden text-sm font-bold sm:inline">~{Math.ceil((questions.length - completedCount) / 6)}p</span>
             </div>
           </div>
-        </div>
+        </PageContainer>
+      </header>
 
-        <div className="max-w-3xl mx-auto px-4 py-8 flex-1 w-full relative z-10">
-          {currentQuestion && (
-            <QuestionCard
-              question={currentQuestion}
-              questionNumber={currentQuestionIndex + 1}
-              selectedValue={currentAnswer}
-              onSelect={(value) => {
-                setResponse(currentQuestion.id, value)
-              }}
-            />
+      <PageContainer className="mt-4 max-w-4xl sm:mt-6 lg:mt-8">
+        <div className="flex flex-col gap-6 md:gap-8">
+          {/* Halfway Milestone Notice */}
+          {showHalfwayNotice && (
+            <div className="animate-fade-in-up">
+              <Card className="border-primary-200 bg-gradient-to-r from-primary-600 to-indigo-600 p-6 text-white shadow-xl">
+                <div className="flex items-center gap-5">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md">
+                    <SparkIcon className="h-8 w-8 text-yellow-300 animate-pulse" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold">Tuyệt vời, bạn đã hoàn thành 50%!</h3>
+                    <p className="mt-1 text-sm text-white/80">Bạn đang đi đúng hướng. Chỉ còn một nửa chặng đường nữa thôi! 🚀</p>
+                  </div>
+                  <button onClick={() => setShowHalfwayNotice(false)} className="h-8 w-8 hover:bg-white/10 rounded-full">✕</button>
+                </div>
+              </Card>
+            </div>
           )}
 
-          <div className="flex items-center justify-between mt-8">
-            <button
-              onClick={handlePrev}
-              disabled={currentQuestionIndex === 0 || isWarping}
-              className="px-6 py-3 rounded-xl border border-white/10 text-gray-300 hover:bg-white/5 backdrop-blur-md disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          {/* Main Question Area */}
+          <div className="flex flex-col items-center text-center">
+            <span className="inline-flex items-center rounded-full bg-primary-50 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-primary-700 border border-primary-100">
+              Câu hỏi {currentQuestionIndex + 1} / {questions.length}
+            </span>
+
+            <h2 key={currentQuestion.id} className="animate-fade-in-up mt-2 text-center text-3xl font-bold leading-[1.35] text-ink-900 sm:text-4xl lg:text-5xl lg:leading-[1.2]">
+              {currentQuestion.textVi}
+            </h2>
+
+            <p className="mt-3 text-lg text-ink-500 italic max-w-2xl">
+              "Hãy chọn mức độ phản ánh đúng nhất về con người bạn."
+            </p>
+
+            {notice ? (
+              <div className="mt-4 rounded-2xl border border-red-100 bg-red-50 px-6 py-4 text-sm font-medium text-red-700 animate-fade-in-up">
+                {notice}
+              </div>
+            ) : null}
+
+            {/* Horizontal Likert Scale */}
+            <div className="mt-4 w-full sm:mt-6 lg:mt-8">
+              <div className="relative mx-auto max-w-3xl px-4">
+                {/* Visual Scale Line */}
+                <div className="absolute left-10 right-10 top-6 h-1 -z-10 bg-ink-100 hidden sm:block" />
+
+                <div className="flex flex-row justify-between sm:items-start">
+                  {LIKERT5_OPTIONS.map((option) => (
+                    <OptionButtonHorizontal
+                      key={option.value}
+                      option={option}
+                      selected={currentAnswer === option.value}
+                      onClick={() => handleSelectAnswer(currentQuestion.id, option.value)}
+                    />
+                  ))}
+                </div>
+
+                {/* Labels at ends */}
+                <div className="mt-4 flex items-center justify-between px-2 text-[11px] font-black uppercase tracking-widest text-ink-400 sm:text-xs">
+                  <div className="flex flex-col items-start gap-1">
+                    <span className="text-red-500">Rất không đồng ý</span>
+                    <span className="h-1 w-8 bg-red-500/20 rounded-full" />
+                  </div>
+                  <div className="flex flex-col items-end gap-1">
+                    <span className="text-primary-600">Rất đồng ý</span>
+                    <span className="h-1 w-8 bg-primary-600/20 rounded-full" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Navigation */}
+          <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between">
+            <Button
+              variant="secondary"
+              onClick={prevQuestion}
+              disabled={currentQuestionIndex === 0}
+              className="h-14 w-full sm:w-auto px-10 border-ink-200 bg-white shadow-sm hover:bg-ink-50"
             >
-              ← Câu trước
-            </button>
+              Câu quay lại
+            </Button>
+
+            <div className="flex flex-1 items-center justify-center gap-4">
+              <span className="text-xs font-bold text-ink-300 uppercase tracking-widest hidden lg:block">Phím mũi tên để di chuyển</span>
+            </div>
 
             {isLastQuestion ? (
-              <button
+              <Button
                 onClick={handleSubmit}
-                disabled={submitting || responses.size < questions.length || isWarping}
-                className="px-8 py-3 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-[0_0_20px_rgba(14,165,233,0.3)] font-semibold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                disabled={submitting || responses.size < questions.length}
+                className="h-14 w-full sm:w-auto px-12 shadow-lg shadow-primary-700/30 text-lg font-bold"
               >
-                {submitting ? 'Đang xử lý...' : 'Nộp bài'}
-              </button>
+                {submitting ? 'Đang xử lý...' : 'Nộp bài ngay'}
+                <ArrowRightIcon className="ml-2 h-6 w-6" />
+              </Button>
             ) : (
-              <button
-                onClick={handleNext}
-                disabled={!currentAnswer || isWarping}
-                className="px-6 py-3 rounded-xl bg-primary-600 text-white shadow-[0_0_20px_rgba(14,165,233,0.3)] font-semibold hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all group relative overflow-hidden"
+              <Button
+                onClick={nextQuestion}
+                disabled={!currentAnswer}
+                className="h-14 w-full sm:w-auto px-12 shadow-md text-lg font-bold"
               >
-                Câu tiếp →
-                {isWarping && (
-                  <div className="absolute inset-0 bg-white/20 animate-pulse rounded-xl blur-sm" />
-                )}
-              </button>
+                Tiếp theo
+                <ArrowRightIcon className="ml-2 h-6 w-6" />
+              </Button>
             )}
           </div>
 
-          <div className="flex flex-wrap justify-center gap-2 mt-12 pb-8">
-            {questions.map((q, idx) => {
-              const isAnswered = responses.has(q.id)
-              const isCurrent = idx === currentQuestionIndex
-
-              return (
-                <button
-                  key={q.id}
-                  onClick={() => handleGoTo(idx)}
-                  disabled={isWarping}
-                  className={`w-10 h-10 rounded-full text-sm font-medium transition-all backdrop-blur-md ${
-                    isCurrent
-                      ? 'bg-primary-500 text-white shadow-[0_0_15px_rgba(14,165,233,0.5)] ring-2 ring-primary-300'
-                      : isAnswered
-                      ? 'bg-primary-900/50 text-primary-200 border border-primary-500/50 hover:bg-primary-800/50'
-                      : 'bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10'
-                  }`}
-                >
-                  {idx + 1}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function QuestionCard({
-  question,
-  questionNumber,
-  selectedValue,
-  onSelect,
-}: {
-  question: Question
-  questionNumber: number
-  selectedValue?: number
-  onSelect: (value: number) => void
-}) {
-  return (
-    <div className="backdrop-blur-xl bg-black/40 rounded-3xl shadow-2xl p-8 border border-white/10 relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-48 h-48 bg-primary-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none" />
-
-      <div className="relative z-10">
-        <div className="text-sm text-primary-400 font-bold mb-3 tracking-widest uppercase">Câu hỏi {questionNumber}</div>
-        <h2 className="text-xl md:text-2xl font-semibold mb-8 text-white leading-relaxed">{question.textVi}</h2>
-
-        <div className="space-y-4">
-          {LIKERT5_OPTIONS.map((option) => (
-            <button
-              key={option.value}
-              onClick={() => onSelect(option.value)}
-              className={`w-full p-4 rounded-2xl border-2 text-left transition-all backdrop-blur-sm group ${
-                selectedValue === option.value
-                  ? 'border-primary-500 bg-primary-500/20 text-white shadow-[0_0_20px_rgba(14,165,233,0.15)]'
-                  : 'border-white/5 text-gray-300 hover:border-white/20 hover:bg-white/5 bg-black/20'
-              }`}
-            >
+          {/* Question Navigator (Always visible) */}
+          <Card className="mx-auto mt-10 w-full max-w-3xl overflow-hidden border border-ink-100 bg-white/50 backdrop-blur-sm">
+            <div className="flex items-center justify-between p-6 sm:p-8">
               <div className="flex items-center gap-4">
-                <div
-                  className={`w-6 h-6 flex-shrink-0 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                    selectedValue === option.value
-                      ? 'border-primary-400 bg-primary-500'
-                      : 'border-gray-500 group-hover:border-gray-400 bg-white/5'
-                  }`}
-                >
-                  {selectedValue === option.value && (
-                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  )}
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-ink-100 text-ink-600">
+                  <CheckCircleIcon className="h-6 w-6" />
                 </div>
-                <span className="font-medium text-[15px]">{option.vi}</span>
+                <div>
+                  <span className="text-sm font-bold text-ink-900">Bản đồ bài làm</span>
+                  <p className="text-xs text-ink-500">Xem nhanh các câu bạn đã trả lời</p>
+                </div>
               </div>
-            </button>
-          ))}
+            </div>
+            
+            <div className="border-t border-ink-100 p-8 pt-6">
+              <div className="flex flex-wrap justify-center gap-2.5">
+                {questions.map((question, index) => {
+                  const isAnswered = responses.has(question.id)
+                  const isCurrent = index === currentQuestionIndex
+
+                  return (
+                    <button
+                      key={question.id}
+                      type="button"
+                      onClick={() => useQuizStore.getState().goToQuestion(index)}
+                      className={[
+                        'flex h-10 w-10 items-center justify-center rounded-xl text-sm font-bold transition-all duration-300',
+                        isCurrent && 'bg-primary-700 text-white shadow-soft scale-110 ring-4 ring-primary-100/50',
+                        !isCurrent && isAnswered && 'bg-primary-100 text-primary-700 hover:bg-primary-200',
+                        !isCurrent && !isAnswered && 'bg-ink-50 text-ink-300 hover:bg-ink-100',
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
+                    >
+                      {index + 1}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          </Card>
         </div>
-      </div>
+      </PageContainer>
     </div>
   )
 }
 
-function LoadingState() {
+function OptionButtonHorizontal({
+  option,
+  selected,
+  onClick,
+}: {
+  option: (typeof LIKERT5_OPTIONS)[number]
+  selected: boolean
+  onClick: () => void
+}) {
+  const getLikertColors = (val: number) => {
+    switch (val) {
+      case 1: return 'bg-red-500'
+      case 2: return 'bg-orange-500'
+      case 3: return 'bg-ink-400'
+      case 4: return 'bg-emerald-500'
+      case 5: return 'bg-primary-600'
+      default: return 'bg-ink-200'
+    }
+  }
+
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-[#0a0a0a]">
-      <div className="text-center">
-        <div className="animate-spin w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full mx-auto shadow-[0_0_15px_rgba(14,165,233,0.5)]" />
-        <p className="mt-4 text-gray-400 font-medium tracking-wide animate-pulse">Đang tải câu hỏi...</p>
+    <button
+      type="button"
+      onClick={onClick}
+      className="group relative flex flex-col items-center gap-3 transition-all duration-300 active:scale-90"
+    >
+      <div
+        className={cx(
+          'flex h-12 w-12 items-center justify-center rounded-2xl text-base font-black transition-all duration-300 shadow-sm sm:h-14 sm:w-14',
+          selected
+            ? `${getLikertColors(option.value)} text-white scale-110 shadow-lg ring-4 ring-white`
+            : 'bg-white text-ink-400 border border-ink-100 hover:border-ink-300 hover:scale-105'
+        )}
+      >
+        {option.value}
       </div>
-    </div>
+
+      {selected && (
+        <div className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-white text-primary-700 shadow-sm animate-fade-in-up border border-primary-100">
+          <CheckCircleIcon className="h-3 w-3" />
+        </div>
+      )}
+
+      <span className={cx(
+        'hidden text-[10px] font-bold uppercase tracking-tighter sm:block',
+        selected ? 'text-ink-900' : 'text-ink-400'
+      )}>
+        {option.value === 3 ? 'Bình thường' : ''}
+      </span>
+    </button>
   )
 }
 
-function ErrorState({ error }: { error: string }) {
+function OptionButton({
+  option,
+  selected,
+  onClick,
+}: {
+  option: (typeof LIKERT5_OPTIONS)[number]
+  selected: boolean
+  onClick: () => void
+}) {
+  const getLikertColors = (val: number) => {
+    switch (val) {
+      case 1: return 'border-red-200 hover:border-red-400 bg-red-50/30'
+      case 2: return 'border-orange-200 hover:border-orange-400 bg-orange-50/30'
+      case 3: return 'border-ink-200 hover:border-primary-300 bg-ink-50/30'
+      case 4: return 'border-emerald-200 hover:border-emerald-400 bg-emerald-50/30'
+      case 5: return 'border-primary-200 hover:border-primary-400 bg-primary-50/30'
+      default: return 'border-ink-100 bg-white'
+    }
+  }
+
+  const getLikertIndicator = (val: number) => {
+    switch (val) {
+      case 1: return 'border-red-500 bg-red-500 text-white'
+      case 2: return 'border-orange-500 bg-orange-500 text-white'
+      case 3: return 'border-ink-400 bg-ink-400 text-white'
+      case 4: return 'border-emerald-500 bg-emerald-500 text-white'
+      case 5: return 'border-primary-600 bg-primary-600 text-white'
+      default: return 'border-ink-200 text-ink-500'
+    }
+  }
+
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-[#0a0a0a]">
-      <div className="text-center backdrop-blur-md bg-white/5 p-8 rounded-3xl border border-red-500/20 shadow-2xl">
-        <p className="text-red-400 text-lg mb-4 font-medium">{error}</p>
-        <button onClick={() => window.location.reload()} className="px-6 py-3 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-all border border-red-500/20 hover:border-red-500/40">
-          Thử lại
-        </button>
+    <button
+      type="button"
+      onClick={onClick}
+      className={[
+        'w-full rounded-[24px] border p-5 text-left transition-all duration-300 transform active:scale-[0.99] group',
+        selected
+          ? 'border-primary-600 bg-primary-50 shadow-soft ring-2 ring-primary-100'
+          : `hover:bg-opacity-100 ${getLikertColors(option.value)}`,
+      ]
+        .filter(Boolean)
+        .join(' ')}
+    >
+      <div className="flex items-center gap-5">
+        <div
+          className={[
+            'flex h-12 w-12 items-center justify-center rounded-2xl border-2 text-sm font-black transition-all duration-300',
+            selected ? 'border-primary-700 bg-primary-700 text-white shadow-soft scale-110' : getLikertIndicator(option.value),
+          ]
+            .filter(Boolean)
+            .join(' ')}
+        >
+          {option.value}
+        </div>
+        <div className="flex-1">
+          <p className={cx('text-lg font-bold transition-colors', selected ? 'text-primary-950' : 'text-ink-800')}>
+            {option.vi}
+          </p>
+          <p className={cx('text-xs uppercase tracking-widest transition-colors', selected ? 'text-primary-700/60' : 'text-ink-400')}>
+            {option.en}
+          </p>
+        </div>
+        {selected && (
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-100 text-primary-700 animate-fade-in-up">
+            <CheckCircleIcon className="h-5 w-5" />
+          </div>
+        )}
       </div>
-    </div>
+    </button>
   )
 }

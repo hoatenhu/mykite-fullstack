@@ -96,12 +96,16 @@ results.post('/submit', zValidator('json', submitAssessmentSchema), async (c) =>
       scores,
       topDimensions,
       resultCode,
+      isPaid: false,
     })
     .returning()
 
   return c.json({
     data: {
       ...result,
+      scores: {},
+      topDimensions: [],
+      resultCode: null,
       assessmentType: assessment.type,
     },
   }, 201)
@@ -119,6 +123,7 @@ results.get('/:sessionId', async (c) => {
       scores: schema.results.scores,
       topDimensions: schema.results.topDimensions,
       resultCode: schema.results.resultCode,
+      isPaid: schema.results.isPaid,
       completedAt: schema.results.completedAt,
       assessmentType: schema.assessments.type,
       assessmentNameVi: schema.assessments.nameVi,
@@ -128,7 +133,14 @@ results.get('/:sessionId', async (c) => {
     .where(eq(schema.results.sessionId, sessionId))
     .orderBy(schema.results.completedAt)
 
-  return c.json({ data: resultList })
+  const maskedResultList = resultList.map(r => ({
+    ...r,
+    scores: r.isPaid ? r.scores : {},
+    topDimensions: r.isPaid ? r.topDimensions : [],
+    resultCode: r.isPaid ? r.resultCode : null,
+  }))
+
+  return c.json({ data: maskedResultList })
 })
 
 // GET /api/results/:sessionId/:assessmentId - Lấy kết quả cụ thể
@@ -143,6 +155,7 @@ results.get('/:sessionId/:assessmentId', async (c) => {
       scores: schema.results.scores,
       topDimensions: schema.results.topDimensions,
       resultCode: schema.results.resultCode,
+      isPaid: schema.results.isPaid,
       completedAt: schema.results.completedAt,
       assessmentType: schema.assessments.type,
       assessmentNameVi: schema.assessments.nameVi,
@@ -161,7 +174,14 @@ results.get('/:sessionId/:assessmentId', async (c) => {
     return c.json({ error: 'Result not found' }, 404)
   }
 
-  return c.json({ data: result })
+  const maskedResult = {
+    ...result,
+    scores: result.isPaid ? result.scores : {},
+    topDimensions: result.isPaid ? result.topDimensions : [],
+    resultCode: result.isPaid ? result.resultCode : null,
+  }
+
+  return c.json({ data: maskedResult })
 })
 
 export default results

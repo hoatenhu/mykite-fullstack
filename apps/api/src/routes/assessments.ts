@@ -39,10 +39,12 @@ assessments.get('/', async (c) => {
 assessments.get('/:id', async (c) => {
   const id = c.req.param('id')
   
+  const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)
+
   const [assessment] = await db
     .select()
     .from(schema.assessments)
-    .where(eq(schema.assessments.id, id))
+    .where(isUUID ? eq(schema.assessments.id, id) : eq(schema.assessments.type, id as any))
     .limit(1)
 
   if (!assessment) {
@@ -52,7 +54,7 @@ assessments.get('/:id', async (c) => {
   const questionCount = await db
     .select({ count: sql<number>`count(*)` })
     .from(schema.questions)
-    .where(eq(schema.questions.assessmentId, id))
+    .where(eq(schema.questions.assessmentId, assessment.id))
 
   return c.json({
     data: {
@@ -65,12 +67,13 @@ assessments.get('/:id', async (c) => {
 // GET /api/assessments/:id/questions - Lấy câu hỏi của bài trắc nghiệm
 assessments.get('/:id/questions', async (c) => {
   const id = c.req.param('id')
+  const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)
 
   // Kiểm tra assessment tồn tại
   const [assessment] = await db
     .select()
     .from(schema.assessments)
-    .where(eq(schema.assessments.id, id))
+    .where(isUUID ? eq(schema.assessments.id, id) : eq(schema.assessments.type, id as any))
     .limit(1)
 
   if (!assessment) {
@@ -87,7 +90,7 @@ assessments.get('/:id/questions', async (c) => {
       responseType: schema.questions.responseType,
     })
     .from(schema.questions)
-    .where(eq(schema.questions.assessmentId, id))
+    .where(eq(schema.questions.assessmentId, assessment.id))
     .orderBy(schema.questions.orderIndex)
 
   return c.json({

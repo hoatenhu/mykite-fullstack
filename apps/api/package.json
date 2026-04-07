@@ -10,11 +10,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "hono": "^4.4.8",
     "@hono/zod-validator": "^0.2.2",
-    "drizzle-orm": "^0.31.2",
-    "postgres": "^3.4.4",
+    "@mykite/database": "workspace:*",
     "@mykite/shared": "workspace:*",
-    "@mykite/database": "workspace:*"
+    "drizzle-orm": "^0.31.2",
+    "hono": "^4.4.8",
+    "postgres": "^3.4.4",
+    "zod": "^4.3.6"
   }
 }

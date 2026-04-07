@@ -84,7 +84,25 @@ export const results = pgTable('results', {
   topDimensions: jsonb('top_dimensions').$type<string[]>(),
   // Mã kết quả (VD: "RIA" cho Holland)
   resultCode: text('result_code'),
+  isPaid: boolean('is_paid').default(false).notNull(),
   completedAt: timestamp('completed_at').defaultNow().notNull(),
+})
+
+// Transactions - Lịch sử thanh toán SePay
+export const transactions = pgTable('transactions', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  sessionId: uuid('session_id')
+    .references(() => sessions.id, { onDelete: 'cascade' })
+    .notNull(),
+  assessmentId: uuid('assessment_id')
+    .references(() => assessments.id, { onDelete: 'cascade' })
+    .notNull(),
+  transactionCode: text('transaction_code').notNull().unique(),
+  amountVnd: integer('amount_vnd').notNull(),
+  status: text('status').default('pending').notNull(), // 'pending', 'paid', 'failed'
+  sepayPaymentId: text('sepay_payment_id'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  paidAt: timestamp('paid_at'),
 })
 
 // Careers - Database nghề nghiệp (đơn giản cho MVP)
@@ -117,3 +135,5 @@ export type Result = typeof results.$inferSelect
 export type NewResult = typeof results.$inferInsert
 export type Career = typeof careers.$inferSelect
 export type NewCareer = typeof careers.$inferInsert
+export type Transaction = typeof transactions.$inferSelect
+export type NewTransaction = typeof transactions.$inferInsert
