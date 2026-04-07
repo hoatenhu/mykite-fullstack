@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid, integer, boolean, jsonb, pgEnum } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp, uuid, integer, boolean, jsonb, pgEnum, uniqueIndex } from 'drizzle-orm/pg-core'
 
 // Enums
 export const assessmentTypeEnum = pgEnum('assessment_type', ['holland', 'bigfive'])
@@ -86,7 +86,9 @@ export const results = pgTable('results', {
   resultCode: text('result_code'),
   isPaid: boolean('is_paid').default(false).notNull(),
   completedAt: timestamp('completed_at').defaultNow().notNull(),
-})
+}, (table) => ({
+  sessionAssessmentUnique: uniqueIndex('results_session_assessment_unique').on(table.sessionId, table.assessmentId),
+}))
 
 // Transactions - Lịch sử thanh toán SePay
 export const transactions = pgTable('transactions', {
