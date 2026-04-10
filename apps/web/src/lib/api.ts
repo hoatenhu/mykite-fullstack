@@ -72,6 +72,7 @@ export interface Result {
   scores: Record<string, number>
   topDimensions: string[] | null
   resultCode: string | null
+  isPaid: boolean
   completedAt: string
 }
 
@@ -123,4 +124,11 @@ export const api = {
   // Careers
   getCareers: (hollandCode?: string) =>
     fetchApi<Career[]>(`/careers${hollandCode ? `?hollandCode=${hollandCode}` : ''}`),
+
+  // Payments
+  createCheckout: (data: { sessionId: string; assessmentId: string; successUrl?: string; cancelUrl?: string }) =>
+    fetchApi<{ transactionId: string; transactionCode: string; checkoutUrl: string; formPayload: Record<string, string> }>('/payments/checkout', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
 }
