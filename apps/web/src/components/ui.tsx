@@ -35,7 +35,7 @@ export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cx(
-        'rounded-[28px] border border-white/70 bg-white/95 shadow-card backdrop-blur-sm',
+        'rounded-[28px] border border-white/70 bg-white/95 shadow-card backdrop-blur-sm transition-all duration-300',
         className
       )}
       {...props}
@@ -67,8 +67,8 @@ export function Button({
   return (
     <button
       className={cx(
-        'inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition duration-200 disabled:cursor-not-allowed disabled:opacity-50',
-        variant === 'primary' && 'bg-primary-700 text-white shadow-soft hover:bg-primary-800',
+        'inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-all duration-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 hover:-translate-y-0.5',
+        variant === 'primary' && 'bg-primary-700 text-white shadow-soft hover:bg-primary-800 hover:shadow-primary-300/30',
         variant === 'secondary' && 'border border-primary-200 bg-white text-primary-700 hover:border-primary-300 hover:bg-primary-50',
         variant === 'ghost' && 'text-ink-600 hover:bg-white hover:text-ink-900',
         className
@@ -91,8 +91,8 @@ export function ButtonLink({
   return (
     <Link
       className={cx(
-        'inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition duration-200',
-        variant === 'primary' && 'bg-primary-700 text-white shadow-soft hover:bg-primary-800',
+        'inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-all duration-200 active:scale-[0.98] hover:-translate-y-0.5',
+        variant === 'primary' && 'bg-primary-700 text-white shadow-soft hover:bg-primary-800 hover:shadow-primary-300/30',
         variant === 'secondary' && 'border border-primary-200 bg-white text-primary-700 hover:border-primary-300 hover:bg-primary-50',
         variant === 'ghost' && 'text-ink-600 hover:bg-white hover:text-ink-900',
         className

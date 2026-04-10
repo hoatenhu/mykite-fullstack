@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
 import { zValidator } from '@hono/zod-validator'
-import { eq, and } from 'drizzle-orm'
+import { eq, and, sql } from 'drizzle-orm'
 import { db, schema } from '../db'
 import { submitAssessmentSchema } from '@mykite/shared'
 import type { Question } from '@mykite/database'
@@ -10,8 +10,8 @@ import { calculateBigFiveScores } from '../services/bigfive.service'
 const results = new Hono()
 
 // POST /api/results/submit - Nộp bài và tính điểm
-results.post('/submit', zValidator('json', submitAssessmentSchema), async (c) => {
-  const body = c.req.valid('json')
+results.post('/submit', zValidator('json', submitAssessmentSchema as any), async (c) => {
+  const body = c.req.valid('json' as any) as { sessionId: string; assessmentId: string; responses: Array<{ questionId: string; value: number }> }
   const { sessionId, assessmentId, responses } = body
 
   // 1. Kiểm tra session
@@ -44,17 +44,7 @@ results.post('/submit', zValidator('json', submitAssessmentSchema), async (c) =>
 
   const questionMap = new Map(questions.map((q: Question) => [q.id, q]))
 
-  // 4. Lưu responses
-  const responseRecords = responses.map((r) => ({
-    sessionId,
-    assessmentId,
-    questionId: r.questionId,
-    value: r.value,
-  }))
-
-  await db.insert(schema.responses).values(responseRecords)
-
-  // 5. Chuẩn bị data cho scoring
+  // 4. Chuẩn bị data cho scoring
   const scoringData = responses.map((r) => {
     const question = questionMap.get(r.questionId)
     if (!question) throw new Error(`Question ${r.questionId} not found`)
@@ -68,7 +58,7 @@ results.post('/submit', zValidator('json', submitAssessmentSchema), async (c) =>
     }
   })
 
-  // 6. Tính điểm dựa trên loại assessment
+  // 5. Tính điểm dựa trên loại assessment
   let scores: Record<string, number>
   let topDimensions: string[] | null = null
   let resultCode: string | null = null
@@ -81,27 +71,69 @@ results.post('/submit', zValidator('json', submitAssessmentSchema), async (c) =>
   } else {
     const bigfiveResult = calculateBigFiveScores(scoringData)
     scores = bigfiveResult.scores
-    // Big Five không có "code" như Holland
     topDimensions = Object.entries(bigfiveResult.levels)
       .filter(([_, level]) => level === 'high')
       .map(([dim]) => dim)
   }
 
-  // 7. Lưu kết quả
-  const [result] = await db
-    .insert(schema.results)
-    .values({
+  // 6. Dùng transaction để đảm bảo tính nhất quán (concurrent submissions safe)
+  const result = await db.transaction(async (tx) => {
+    // Xóa responses cũ (nếu làm lại bài) trước khi insert mới
+    await tx
+      .delete(schema.responses)
+      .where(
+        and(
+          eq(schema.responses.sessionId, sessionId),
+          eq(schema.responses.assessmentId, assessmentId)
+        )
+      )
+
+    // Insert responses mới
+    const responseRecords = responses.map((r) => ({
       sessionId,
       assessmentId,
-      scores,
-      topDimensions,
-      resultCode,
-    })
-    .returning()
+      questionId: r.questionId,
+      value: r.value,
+    }))
+    await tx.insert(schema.responses).values(responseRecords)
+
+    // Upsert result bên trong transaction:
+    // SELECT trước để biết có row cũ không
+    const [existing] = await tx
+      .select({ id: schema.results.id, isPaid: schema.results.isPaid })
+      .from(schema.results)
+      .where(and(
+        eq(schema.results.sessionId, sessionId),
+        eq(schema.results.assessmentId, assessmentId)
+      ))
+      .limit(1)
+
+    if (existing) {
+      // Đã có result → UPDATE điểm mới, BẮT BUỘC THANH TOÁN LẠI (isPaid: false)
+      const [updated] = await tx
+        .update(schema.results)
+        .set({ scores, topDimensions, resultCode, isPaid: false, completedAt: sql`now()` })
+        .where(eq(schema.results.id, existing.id))
+        .returning()
+      return updated!
+    } else {
+      // Chưa có → INSERT mới với isPaid = false
+      const [inserted] = await tx
+        .insert(schema.results)
+        .values({ sessionId, assessmentId, scores, topDimensions, resultCode, isPaid: false })
+        .returning()
+      return inserted!
+    }
+  })
+
+  const isPaid = result.isPaid
 
   return c.json({
     data: {
       ...result,
+      scores: isPaid ? scores : {},
+      topDimensions: isPaid ? topDimensions : [],
+      resultCode: isPaid ? resultCode : null,
       assessmentType: assessment.type,
     },
   }, 201)
@@ -119,6 +151,7 @@ results.get('/:sessionId', async (c) => {
       scores: schema.results.scores,
       topDimensions: schema.results.topDimensions,
       resultCode: schema.results.resultCode,
+      isPaid: schema.results.isPaid,
       completedAt: schema.results.completedAt,
       assessmentType: schema.assessments.type,
       assessmentNameVi: schema.assessments.nameVi,
@@ -128,7 +161,14 @@ results.get('/:sessionId', async (c) => {
     .where(eq(schema.results.sessionId, sessionId))
     .orderBy(schema.results.completedAt)
 
-  return c.json({ data: resultList })
+  const maskedResultList = resultList.map(r => ({
+    ...r,
+    scores: r.isPaid ? r.scores : {},
+    topDimensions: r.isPaid ? r.topDimensions : [],
+    resultCode: r.isPaid ? r.resultCode : null,
+  }))
+
+  return c.json({ data: maskedResultList })
 })
 
 // GET /api/results/:sessionId/:assessmentId - Lấy kết quả cụ thể
@@ -143,6 +183,7 @@ results.get('/:sessionId/:assessmentId', async (c) => {
       scores: schema.results.scores,
       topDimensions: schema.results.topDimensions,
       resultCode: schema.results.resultCode,
+      isPaid: schema.results.isPaid,
       completedAt: schema.results.completedAt,
       assessmentType: schema.assessments.type,
       assessmentNameVi: schema.assessments.nameVi,
@@ -161,7 +202,14 @@ results.get('/:sessionId/:assessmentId', async (c) => {
     return c.json({ error: 'Result not found' }, 404)
   }
 
-  return c.json({ data: result })
+  const maskedResult = {
+    ...result,
+    scores: result.isPaid ? result.scores : {},
+    topDimensions: result.isPaid ? result.topDimensions : [],
+    resultCode: result.isPaid ? result.resultCode : null,
+  }
+
+  return c.json({ data: maskedResult })
 })
 
 export default results
