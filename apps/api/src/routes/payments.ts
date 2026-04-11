@@ -76,7 +76,7 @@ payments.post('/checkout', zValidator('json', checkoutSchema as any), async (c) 
   }
 
   // 4. Build SePay Checkout form payload
-  const defaultUrl = process.env.FRONTEND_URL || 'http://localhost:5173'
+  const defaultUrl = process.env.FRONTEND_URL || 'https://app.mykite.vn'
   const finalSuccessUrl = successUrl || `${defaultUrl}/results/${sessionId}/${assessmentId}`
   const finalCancelUrl = cancelUrl || `${defaultUrl}/results/${sessionId}/${assessmentId}`
 
