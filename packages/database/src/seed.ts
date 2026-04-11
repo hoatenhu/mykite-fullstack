@@ -43,6 +43,10 @@ async function seed() {
       })
       .returning()
 
+    if (!hollandAssessment) {
+      throw new Error('Failed to create Holland assessment')
+    }
+
     const [bigfiveAssessment] = await db
       .insert(schema.assessments)
       .values({
@@ -55,6 +59,10 @@ async function seed() {
         isActive: true,
       })
       .returning()
+
+    if (!bigfiveAssessment) {
+      throw new Error('Failed to create Big Five assessment')
+    }
 
     console.log(`✅ Created assessments: Holland (${hollandAssessment.id}), Big Five (${bigfiveAssessment.id})`)
 
