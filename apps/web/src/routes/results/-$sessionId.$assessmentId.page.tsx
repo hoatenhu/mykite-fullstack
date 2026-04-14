@@ -1,4 +1,4 @@
-import { Link, useParams } from '@tanstack/react-router'
+import { useParams } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
@@ -50,6 +50,18 @@ export function ResultsPage() {
 
     fetchData()
   }, [assessmentId, sessionId])
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+        e.preventDefault()
+        // Optional: Can add a toast message here if you want to notify users
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   if (loading) {
     return <LoadingState title="MyKite đang phân tích kết quả" description="Chúng mình đang gom các tín hiệu nổi bật để trả lại một bức tranh rõ ràng hơn về bạn." />
@@ -139,12 +151,12 @@ export function ResultsPage() {
             <BigFiveResults result={result} />
           )}
 
-          <Card className="p-6 sm:p-8">
+          <Card className="p-6 sm:p-8" data-html2canvas-ignore>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h2 className="text-xl font-semibold text-ink-900">Bạn muốn làm gì tiếp theo?</h2>
                 <p className="mt-2 text-sm leading-6 text-ink-600">
-                  Bạn có thể làm thêm bài còn lại để bổ sung góc nhìn, hoặc tải file báo cáo này về (Ctrl+P / Command+P) để in hoặc lưu thành PDF.
+                  Bạn có thể làm thêm bài còn lại để bổ sung góc nhìn, hoặc tải file báo cáo này về để in hoặc lưu thành PDF.
                 </p>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row shrink-0">

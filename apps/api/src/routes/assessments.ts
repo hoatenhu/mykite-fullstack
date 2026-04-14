@@ -91,7 +91,12 @@ assessments.get('/:id/questions', async (c) => {
     })
     .from(schema.questions)
     .where(eq(schema.questions.assessmentId, assessment.id))
-    .orderBy(schema.questions.orderIndex)
+
+  // Xuất hiện ngẫu nhiên - Shuffle questions
+  for (let i = questions.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [questions[i], questions[j]] = [questions[j], questions[i]];
+  }
 
   return c.json({
     data: {

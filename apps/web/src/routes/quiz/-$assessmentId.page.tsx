@@ -42,13 +42,13 @@ export function QuizPage() {
     loadAssessment()
   }, [loadAssessment])
 
+  // Tạo session MỚI mỗi lần vào trang làm bài, bất kể đã có session cũ hay chưa.
+  // Điều này đảm bảo mỗi lần làm bài → submit → phải thanh toán riêng.
   useEffect(() => {
-    if (!sessionId) {
-      api.createSession({}).then((session) => {
-        setSession(session.id, session.nickname ?? undefined)
-      })
-    }
-  }, [sessionId, setSession])
+    api.createSession({}).then((session) => {
+      setSession(session.id, session.nickname ?? undefined)
+    })
+  }, [setSession])
 
   // const handleNext = () => {
   //   setIsWarping(true)

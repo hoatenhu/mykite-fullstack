@@ -161,7 +161,19 @@ results.get('/:sessionId', async (c) => {
     .where(eq(schema.results.sessionId, sessionId))
     .orderBy(schema.results.completedAt)
 
-  const maskedResultList = resultList.map(r => ({
+  const now = Date.now()
+  const EXPIRATION_TIME_MS = 30 * 60 * 1000
+
+  const validResults = resultList.filter((r) => {
+    let elapsed = now - new Date(r.completedAt).getTime()
+    // Handle timezone discrepancy (if DB time is in local +7 but parsed as UTC it will appear in the future)
+    if (elapsed < 0) {
+      elapsed += 7 * 60 * 60 * 1000
+    }
+    return elapsed <= EXPIRATION_TIME_MS
+  })
+
+  const maskedResultList = validResults.map(r => ({
     ...r,
     scores: r.isPaid ? r.scores : {},
     topDimensions: r.isPaid ? r.topDimensions : [],
@@ -200,6 +212,17 @@ results.get('/:sessionId/:assessmentId', async (c) => {
 
   if (!result) {
     return c.json({ error: 'Result not found' }, 404)
+  }
+
+  const EXPIRATION_TIME_MS = 30 * 60 * 1000
+  let elapsed = Date.now() - new Date(result.completedAt).getTime()
+  // Handle timezone discrepancy (if DB time is in local +7 but parsed as UTC it will appear in the future)
+  if (elapsed < 0) {
+    elapsed += 7 * 60 * 60 * 1000
+  }
+
+  if (elapsed > EXPIRATION_TIME_MS) {
+    return c.json({ error: 'Đường dẫn kết quả này đã hết hạn (chỉ có hiệu lực trong 30 phút).' }, 410)
   }
 
   const maskedResult = {
