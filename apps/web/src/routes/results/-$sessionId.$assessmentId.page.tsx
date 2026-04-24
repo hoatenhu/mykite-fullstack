@@ -12,7 +12,7 @@ import {
 } from '@mykite/shared'
 import { BigFiveChart } from '@/components/BigFiveChart'
 import { HollandChart } from '@/components/HollandChart'
-import { ArrowRightIcon, CheckCircleIcon, PrintIcon } from '@/components/icons'
+import { ArrowRightIcon, PrintIcon } from '@/components/icons'
 import { api, type Career, type Result } from '@/lib/api'
 import { Button, ButtonLink, Card, ErrorState, LoadingState, PageContainer, Pill } from '@/components/ui'
 
@@ -23,7 +23,6 @@ export function ResultsPage() {
   const [careers, setCareers] = useState<Career[]>([])
   const [loading, setLoading] = useState(true)
   const [downloading, setDownloading] = useState(false)
-  const [downloadProgress, setDownloadProgress] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -84,24 +83,13 @@ export function ResultsPage() {
   const handleDownloadPDF = async () => {
     try {
       setDownloading(true)
-      setDownloadProgress(0)
-
-      // Start fake progress interval
-      const progressInterval = setInterval(() => {
-        setDownloadProgress((prev) => {
-          if (prev >= 90) return prev // Stop at 90% until actually finished
-          return Math.min(prev + Math.floor(Math.random() * 15) + 5, 90)
-        })
-      }, 500)
 
       const element = document.getElementById('report-content')
       if (!element) {
-        clearInterval(progressInterval)
         setDownloading(false)
         return
       }
 
-      // Allow UI to paint modal before starting hard work (html2canvas is synchronous-heavy)
       await new Promise(resolve => setTimeout(resolve, 300))
 
       const canvas = await html2canvas(element, {
@@ -121,99 +109,59 @@ export function ResultsPage() {
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width
 
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
-
-      clearInterval(progressInterval)
-      setDownloadProgress(100)
-
-      // Delay a tiny bit so user sees 100%
-      setTimeout(() => {
-        pdf.save(`MyKite-BaoCao-${result.assessmentType}.pdf`)
-        setDownloading(false)
-      }, 400)
+      pdf.save(`MyKite-BaoCao-${result.assessmentType}.pdf`)
+      setDownloading(false)
 
     } catch (err) {
-      alert('Có lỗi xảy ra khi tải báo cáo, vui lòng thử lại sau.')
       console.error(err)
+      alert('Có lỗi xảy ra khi tải báo cáo, vui lòng thử lại sau.')
       setDownloading(false)
     }
   }
 
-  return (
-    <>
+    return (
       <div className="pb-20 pt-10 sm:pt-12" id="report-content">
         <PageContainer className="max-w-5xl">
-        <ResultHero result={result} />
+          <ResultHero result={result} />
 
-        <div className="mt-8 space-y-6">
-          {result.assessmentType === 'holland' ? (
-            <HollandResults result={result} careers={careers} />
-          ) : (
-            <BigFiveResults result={result} />
-          )}
+          <div className="mt-8 space-y-6">
+            {result.assessmentType === 'holland' ? (
+              <HollandResults result={result} careers={careers} />
+            ) : (
+              <BigFiveResults result={result} />
+            )}
 
-          <Card className="p-6 sm:p-8" data-html2canvas-ignore>
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <h2 className="text-xl font-semibold text-ink-900">Bạn muốn làm gì tiếp theo?</h2>
-                <p className="mt-2 text-sm leading-6 text-ink-600">
-                  Bạn có thể làm thêm bài còn lại để bổ sung góc nhìn, hoặc tải file báo cáo này về để in hoặc lưu thành PDF.
-                </p>
+            <Card className="p-6 sm:p-8" data-html2canvas-ignore>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h2 className="text-xl font-semibold text-ink-900">Tiếp theo</h2>
+                  <p className="mt-2 text-sm leading-6 text-ink-600">
+                    Làm thêm bài còn lại để có góc nhìn đầy đủ hơn, hoặc tải kết quả này về để lưu lại.
+                  </p>
+                </div>
+                <div className="flex flex-col gap-3 sm:flex-row shrink-0">
+                  <ButtonLink to="/assessments" variant="secondary" className="w-full sm:w-auto whitespace-nowrap">
+                    Làm bài khác
+                  </ButtonLink>
+                  <Button onClick={handleDownloadPDF} disabled={downloading} className="w-full sm:w-auto whitespace-nowrap">
+                    <PrintIcon className="mr-2 h-5 w-5" />
+                    {downloading ? 'Đang tải...' : 'Tải kết quả'}
+                  </Button>
+                </div>
               </div>
-              <div className="flex flex-col gap-3 sm:flex-row shrink-0">
-                <ButtonLink to="/assessments" variant="secondary" className="w-full sm:w-auto whitespace-nowrap">
-                  Làm bài khác
-                </ButtonLink>
-                <Button onClick={handleDownloadPDF} disabled={downloading} className="w-full sm:w-auto whitespace-nowrap">
-                  <PrintIcon className="mr-2 h-5 w-5" />
-                  {downloading ? 'Đang tạo PDF...' : 'Tải kết quả'}
-                </Button>
-              </div>
-            </div>
-          </Card>
-        </div>
-      </PageContainer>
-      </div>
-
-      {/* Download Progress Modal */}
-      {downloading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink-900/40 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-sm rounded-[24px] bg-white p-8 shadow-2xl animate-fade-in-up text-center mx-4">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-50 text-primary-600 mb-6">
-              <PrintIcon className="h-8 w-8 animate-pulse" />
-            </div>
-            <h3 className="text-xl font-bold text-ink-900">Đang chuẩn bị báo cáo</h3>
-            <p className="mt-2 text-sm text-ink-500">
-              Vui lòng đợi vài giây để hệ thống tổng hợp dữ liệu thành file PDF chất lượng cao.
-            </p>
-
-            <div className="mt-8">
-              <div className="flex justify-between text-xs font-bold uppercase tracking-wider text-ink-500 mb-2">
-                <span>Tiến trình tải</span>
-                <span className="text-primary-600 font-extrabold">{downloadProgress}%</span>
-              </div>
-              <div className="h-2 w-full overflow-hidden rounded-full bg-ink-100">
-                <div
-                  className="h-full bg-gradient-to-r from-primary-400 to-primary-600 transition-all duration-300 ease-out"
-                  style={{ width: `${downloadProgress}%` }}
-                />
-              </div>
-            </div>
+            </Card>
           </div>
-        </div>
-      )}
-    </>
+        </PageContainer>
+      </div>
   )
 }
 
 function ResultHero({ result }: { result: Result }) {
   return (
-    <Card className="overflow-hidden border-primary-100 bg-gradient-to-br from-white via-primary-50 to-cream-50 p-8 sm:p-10">
+    <Card className="overflow-hidden bg-paper-50 p-8 sm:p-10">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-2xl">
-          <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-mint-100 text-primary-700">
-            <CheckCircleIcon className="h-7 w-7" />
-          </div>
-          <p className="mt-5 text-sm uppercase tracking-[0.2em] text-primary-600">Kết quả đã sẵn sàng</p>
+          <p className="font-label text-xs uppercase tracking-[0.2em] text-ink-500">Kết quả đã sẵn sàng</p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl">{result.assessmentNameVi ?? 'Kết quả trắc nghiệm của bạn'}</h1>
           <p className="mt-4 text-base leading-7 text-ink-600">
             {result.assessmentType === 'holland'
@@ -223,12 +171,12 @@ function ResultHero({ result }: { result: Result }) {
         </div>
 
         {result.assessmentType === 'holland' && result.resultCode ? (
-          <div className="rounded-[28px] bg-primary-700 px-8 py-7 text-center text-white shadow-soft">
-            <p className="text-sm uppercase tracking-[0.18em] text-primary-100">Mã Holland</p>
-            <p className="mt-2 text-5xl font-semibold tracking-[0.18em]">{result.resultCode}</p>
+          <div className="rounded-[20px] border border-ink-200 bg-paper-200/70 px-7 py-6 text-center text-ink-900">
+            <p className="font-label text-xs uppercase tracking-[0.18em] text-ink-500">Mã Holland</p>
+            <p className="mt-2 text-4xl font-semibold tracking-[0.12em] text-ink-900">{result.resultCode}</p>
           </div>
         ) : (
-          <Pill className="border-primary-200 bg-white text-primary-700">Big Five OCEAN</Pill>
+          <Pill className="border-ink-300 bg-paper-200 text-ink-800">Big Five OCEAN</Pill>
         )}
       </div>
     </Card>
@@ -253,10 +201,10 @@ function HollandResults({ result, careers }: { result: Result; careers: Career[]
         <h2 className="text-2xl font-semibold text-ink-900">3 nhóm nổi bật nhất</h2>
         <div className="mt-6 space-y-4">
           {topThree.map((dimension, index) => (
-            <div key={dimension} className="rounded-[24px] border border-ink-100 bg-ink-50 p-5">
+            <div key={dimension} className="rounded-[24px] border border-ink-200 bg-paper-100 p-5">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-700 text-lg font-semibold text-white">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-ink-200 bg-paper-50 text-sm font-semibold text-ink-900">
                     {index + 1}
                   </div>
                   <div>
@@ -285,13 +233,13 @@ function HollandResults({ result, careers }: { result: Result; careers: Career[]
 
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             {careers.map((career) => (
-              <div key={career.id} className="rounded-[24px] border border-ink-100 bg-white p-5 shadow-card">
+              <div key={career.id} className="rounded-[24px] border border-ink-200 bg-paper-50 p-5">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <h3 className="font-semibold text-ink-900">{career.nameVi}</h3>
                     {career.nameEn ? <p className="mt-1 text-sm text-ink-500">{career.nameEn}</p> : null}
                   </div>
-                  {career.futureOutlook === 'high' ? <Pill className="bg-mint-100 text-primary-700">Xu hướng cao</Pill> : null}
+                  {career.futureOutlook === 'high' ? <Pill className="bg-paper-200 text-ink-800">Xu hướng cao</Pill> : null}
                 </div>
 
                 {career.matchScore > 0 ? (
@@ -300,9 +248,9 @@ function HollandResults({ result, careers }: { result: Result; careers: Career[]
                       <span>Độ phù hợp</span>
                       <span className="font-medium text-ink-900">{Math.min(career.matchScore, 100)}%</span>
                     </div>
-                    <div className="h-2 overflow-hidden rounded-full bg-primary-100">
+                    <div className="h-2 overflow-hidden rounded-full bg-ink-200">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-primary-500 to-primary-700"
+                        className="h-full rounded-full bg-ink-900"
                         style={{ width: `${Math.min(career.matchScore, 100)}%` }}
                       />
                     </div>
@@ -337,7 +285,7 @@ function BigFiveResults({ result }: { result: Result }) {
             const level = getLevel(scores[dimension])
 
             return (
-              <div key={dimension} className="rounded-[24px] border border-ink-100 bg-ink-50 p-5">
+              <div key={dimension} className="rounded-[24px] border border-ink-200 bg-paper-100 p-5">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <h3 className="text-lg font-semibold text-ink-900">{BIGFIVE_LABELS[dimension].vi}</h3>
@@ -345,12 +293,12 @@ function BigFiveResults({ result }: { result: Result }) {
                   </div>
                   <div className="flex items-center gap-3">
                     <Pill>{level}</Pill>
-                    <span className="text-lg font-semibold text-primary-700">{scores[dimension]}%</span>
+                    <span className="text-lg font-semibold text-ink-900">{scores[dimension]}%</span>
                   </div>
                 </div>
-                <div className="mt-4 h-3 overflow-hidden rounded-full bg-primary-100">
+                <div className="mt-4 h-3 overflow-hidden rounded-full bg-ink-200">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-primary-400 to-primary-700"
+                    className="h-full rounded-full bg-ink-900"
                     style={{ width: `${scores[dimension]}%` }}
                   />
                 </div>
@@ -361,7 +309,7 @@ function BigFiveResults({ result }: { result: Result }) {
         </div>
       </Card>
 
-      <Card className="border-primary-100 bg-primary-50 p-6 sm:p-8">
+      <Card className="border-ink-300 bg-paper-100 p-6 sm:p-8">
         <h2 className="text-2xl font-semibold text-ink-900">Gợi ý bước tiếp theo</h2>
         <ul className="mt-4 space-y-3 text-sm leading-7 text-ink-600">
           <li>Đối chiếu kết quả với cách bạn học và làm việc thực tế gần đây.</li>
@@ -429,62 +377,56 @@ function PaymentScreen({ result, sessionId, assessmentId, onPaymentSuccess }: { 
   }
 
   return (
-    <div className="pb-20 pt-10 sm:pt-12 min-h-screen">
+    <div className="min-h-screen bg-paper-100 pb-20 pt-10 sm:pt-12">
       <PageContainer className="max-w-3xl">
-        <div className="text-center animate-fade-in-up">
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-primary-400 to-primary-700 text-white shadow-xl">
-            <CheckCircleIcon className="h-10 w-10" />
-          </div>
-
-          <h1 className="mt-8 text-3xl font-bold tracking-tight text-ink-900 sm:text-4xl">
-            Tuyệt vời! Chúng tôi đã phân tích xong Dữ liệu của bạn 🚀
+        <div className="text-center">
+          <p className="font-label text-xs uppercase tracking-[0.2em] text-ink-500">Kết quả đã sẵn sàng</p>
+          <h1 className="mt-4 text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl">
+            Mở khóa để xem trọn vẹn báo cáo của bạn.
           </h1>
-          <p className="mt-4 text-lg leading-8 text-ink-600 max-w-2xl mx-auto">
-            Kết quả bài trắc nghiệm <strong className="text-ink-900">{result.assessmentNameVi}</strong> đã sẵn sàng. Hãy mở khóa để khám phá bức tranh toàn cảnh về bản thân mình!
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-8 text-ink-600">
+            Kết quả bài trắc nghiệm <strong className="text-ink-900">{result.assessmentNameVi}</strong> đã được phân tích xong. Mở khóa để xem toàn bộ diễn giải, gợi ý và file tải về.
           </p>
         </div>
 
-        <Card className="mt-12 overflow-hidden border-primary-200 bg-gradient-to-br from-white to-primary-50 p-8 sm:p-10 shadow-lg animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+        <Card className="mt-10 overflow-hidden bg-paper-50 p-8 sm:p-10">
           <div className="flex flex-col items-center justify-center text-center">
-            <Pill className="bg-primary-100 text-primary-800 font-bold mb-4 uppercase tracking-widest text-xs">Mở khóa Kết Quả</Pill>
+            <Pill className="mb-4 bg-paper-200 text-ink-800">Mở khóa kết quả</Pill>
 
             <div className="flex items-center justify-center gap-3">
               <span className="text-2xl font-bold text-ink-400 line-through decoration-ink-300">
                 {originalPrice}đ
               </span>
-              <span className="text-5xl font-extrabold text-primary-700">
+              <span className="text-5xl font-extrabold text-ink-900">
                 {finalPrice}đ
               </span>
             </div>
 
             <p className="mt-6 text-base font-semibold text-ink-900">
-              Nhận ngay báo cáo trọn đời chỉ với 1 lần mở khóa:
+              Bạn sẽ nhận được:
             </p>
-            <ul className="mt-4 mb-2 flex flex-col gap-3 text-left text-sm text-ink-700 bg-white/50 rounded-2xl p-5 border border-ink-100 max-w-sm w-full mx-auto shadow-sm">
+            <ul className="mt-4 mb-2 flex w-full max-w-sm flex-col gap-3 rounded-2xl border border-ink-200 bg-paper-100 p-5 text-left text-sm text-ink-700">
               <li className="flex items-start gap-3">
-                <CheckCircleIcon className="mt-0.5 h-5 w-5 shrink-0 text-mint-500" />
-                <span>Xem bản phân tích <strong>đầy đủ và đa chiều</strong></span>
+                <span>Phân tích đầy đủ và dễ đọc</span>
               </li>
               <li className="flex items-start gap-3">
-                <CheckCircleIcon className="mt-0.5 h-5 w-5 shrink-0 text-mint-500" />
-                <span>Nhận gợi ý <strong>lộ trình và ngành nghề</strong> sát thực tế</span>
+                <span>Gợi ý nghề nghiệp và bước tiếp theo</span>
               </li>
               <li className="flex items-start gap-3">
-                <CheckCircleIcon className="mt-0.5 h-5 w-5 shrink-0 text-mint-500" />
-                <span>Tải &amp; lưu file về máy <strong>thuận tiện tư vấn</strong></span>
+                <span>Tải file báo cáo để lưu lại</span>
               </li>
             </ul>
 
             <Button
               onClick={handleCheckout}
               disabled={loading}
-              className="mt-8 h-14 px-12 text-lg font-bold shadow-soft transition-transform hover:scale-105"
+              className="mt-8 h-12 px-10 text-base font-bold"
             >
               {loading ? 'Đang khởi tạo...' : 'Thanh toán ngay'}
               {!loading && <ArrowRightIcon className="ml-2 h-5 w-5" />}
             </Button>
 
-            <div className="mt-6 text-xs text-ink-400 flex items-center gap-2">
+            <div className="mt-6 flex items-center gap-2 text-xs text-ink-400">
               <span>Bảo mật thanh toán qua SePay</span>
             </div>
           </div>
@@ -493,4 +435,3 @@ function PaymentScreen({ result, sessionId, assessmentId, onPaymentSuccess }: { 
     </div>
   )
 }
-

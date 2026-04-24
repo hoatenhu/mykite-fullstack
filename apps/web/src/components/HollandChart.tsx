@@ -24,30 +24,30 @@ export function HollandChart({ scores }: HollandChartProps) {
     <div className="w-full h-80">
       <ResponsiveContainer width="100%" height="100%">
         <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
-          <PolarGrid stroke="#d4d7e9" />
+          <PolarGrid stroke="#c9c9bf" />
           <PolarAngleAxis
             dataKey="dimension"
-            tick={{ fill: '#34384e', fontSize: 12 }}
+            tick={{ fill: '#232320', fontSize: 12 }}
           />
           <PolarRadiusAxis
             angle={30}
             domain={[0, 100]}
-            tick={{ fill: '#67708e', fontSize: 10 }}
+            tick={{ fill: '#57574f', fontSize: 10 }}
           />
           <Radar
             name="Điểm số"
             dataKey="score"
-            stroke="#2f398e"
-            fill="#8288bb"
-            fillOpacity={0.45}
+            stroke="#111111"
+            fill="#4f4f4a"
+            fillOpacity={0.36}
             strokeWidth={2}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: 'white',
-              border: '1px solid #dce2f4',
-              borderRadius: '16px',
-              boxShadow: '0 18px 40px -26px rgba(32, 35, 50, 0.18)',
+              backgroundColor: '#f7f7f2',
+              border: '2px solid #10100f',
+              borderRadius: '12px',
+              boxShadow: '4px 4px 0 rgba(0, 0, 0, 0.8)',
             }}
             formatter={(value: number) => [`${value}%`, 'Điểm số']}
           />

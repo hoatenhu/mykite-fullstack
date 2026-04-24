@@ -24,8 +24,8 @@ export function SectionTitle({
 
   return (
     <div className={cx('max-w-3xl', alignment)}>
-      {eyebrow ? <p className="mb-3 text-sm font-medium uppercase tracking-[0.2em] text-primary-600">{eyebrow}</p> : null}
-      <h2 className="text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl">{title}</h2>
+      {eyebrow ? <p className="mb-3 font-label text-xs font-semibold uppercase tracking-[0.24em] text-ink-600">{eyebrow}</p> : null}
+      <h2 className="font-display text-4xl font-extrabold leading-tight tracking-wide text-ink-900 sm:text-5xl">{title}</h2>
       {description ? <p className="mt-4 text-base leading-7 text-ink-600 sm:text-lg">{description}</p> : null}
     </div>
   )
@@ -35,7 +35,7 @@ export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cx(
-        'rounded-[28px] border border-white/70 bg-white/95 shadow-card backdrop-blur-sm transition-all duration-300',
+        'ink-frame bg-paper-50 transition-all duration-300',
         className
       )}
       {...props}
@@ -47,7 +47,7 @@ export function Pill({ children, className }: { children: ReactNode; className?:
   return (
     <span
       className={cx(
-        'inline-flex items-center rounded-full border border-primary-100 bg-primary-50 px-3 py-1 text-sm font-medium text-primary-700',
+        'inline-flex items-center rounded-md border-2 border-ink-300 bg-paper-200 px-3 py-1 font-label text-xs font-semibold uppercase tracking-wider text-ink-700',
         className
       )}
     >
@@ -67,10 +67,10 @@ export function Button({
   return (
     <button
       className={cx(
-        'inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-all duration-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 hover:-translate-y-0.5',
-        variant === 'primary' && 'bg-primary-700 text-white shadow-soft hover:bg-primary-800 hover:shadow-primary-300/30',
-        variant === 'secondary' && 'border border-primary-200 bg-white text-primary-700 hover:border-primary-300 hover:bg-primary-50',
-        variant === 'ghost' && 'text-ink-600 hover:bg-white hover:text-ink-900',
+        'ink-button inline-flex min-h-11 items-center justify-center gap-2 px-5 py-3 font-label text-base font-bold uppercase tracking-wide transition-all duration-200 active:translate-x-[1px] active:translate-y-[1px] active:shadow-none disabled:cursor-not-allowed disabled:opacity-50',
+        variant === 'primary' && 'bg-ink-900 text-paper-50 hover:bg-ink-800',
+        variant === 'secondary' && 'bg-paper-50 text-ink-900 hover:bg-paper-200',
+        variant === 'ghost' && 'border-none bg-transparent text-ink-700 shadow-none hover:bg-paper-200',
         className
       )}
       {...props}
@@ -91,10 +91,10 @@ export function ButtonLink({
   return (
     <Link
       className={cx(
-        'inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-all duration-200 active:scale-[0.98] hover:-translate-y-0.5',
-        variant === 'primary' && 'bg-primary-700 text-white shadow-soft hover:bg-primary-800 hover:shadow-primary-300/30',
-        variant === 'secondary' && 'border border-primary-200 bg-white text-primary-700 hover:border-primary-300 hover:bg-primary-50',
-        variant === 'ghost' && 'text-ink-600 hover:bg-white hover:text-ink-900',
+        'ink-button inline-flex min-h-11 items-center justify-center gap-2 px-5 py-3 font-label text-base font-bold uppercase tracking-wide transition-all duration-200 active:translate-x-[1px] active:translate-y-[1px] active:shadow-none',
+        variant === 'primary' && 'bg-ink-900 text-paper-50 hover:bg-ink-800',
+        variant === 'secondary' && 'bg-paper-50 text-ink-900 hover:bg-paper-200',
+        variant === 'ghost' && 'border-none bg-transparent text-ink-700 shadow-none hover:bg-paper-200',
         className
       )}
       {...props}
@@ -106,9 +106,9 @@ export function ButtonLink({
 
 export function ProgressBar({ value }: { value: number }) {
   return (
-    <div className="h-2 overflow-hidden rounded-full bg-primary-100">
+    <div className="h-2 overflow-hidden rounded-full bg-ink-200">
       <div
-        className="h-full rounded-full bg-gradient-to-r from-primary-500 to-primary-700 transition-all duration-300"
+        className="h-full rounded-full bg-ink-900 transition-all duration-300"
         style={{ width: `${Math.max(0, Math.min(value, 100))}%` }}
       />
     </div>
@@ -119,7 +119,7 @@ export function LoadingState({ title, description }: { title: string; descriptio
   return (
     <div className="flex min-h-[40vh] items-center justify-center px-4 py-16">
       <Card className="w-full max-w-md p-8 text-center">
-        <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-primary-200 border-t-primary-700" />
+        <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-ink-300 border-t-ink-900" />
         <h2 className="mt-6 text-xl font-semibold text-ink-900">{title}</h2>
         {description ? <p className="mt-2 text-sm leading-6 text-ink-600">{description}</p> : null}
       </Card>
@@ -139,7 +139,7 @@ export function ErrorState({
   return (
     <div className="flex min-h-[40vh] items-center justify-center px-4 py-16">
       <Card className="w-full max-w-lg p-8 text-center">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-cream-100 text-primary-700">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-paper-200 text-ink-900">
           <span className="text-2xl font-semibold">!</span>
         </div>
         <h2 className="mt-6 text-xl font-semibold text-ink-900">{title}</h2>

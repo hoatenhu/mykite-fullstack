@@ -1,11 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { AssessmentCard } from '@/components/AssessmentCard'
-import { ArrowRightIcon } from '@/components/icons'
 import { api, type Assessment } from '@/lib/api'
 import {
   Button,
-  ButtonLink,
   EmptyState,
   ErrorState,
   LoadingState,
@@ -55,15 +53,15 @@ function AssessmentsPage() {
     <div className="pb-20 pt-10 sm:pt-14">
       <PageContainer>
         <SectionTitle
-          eyebrow="Khu trắc nghiệm"
-          title="Chọn bài phù hợp với câu hỏi bạn đang có ở hiện tại."
-          description="Nếu bạn đang phân vân nghề nào hợp với mình, hãy bắt đầu với Holland. Nếu bạn muốn hiểu sâu hơn cách mình học, phản ứng và hợp tác với người khác, hãy làm thêm Big Five."
+          eyebrow="Assessment studio"
+          title="Chọn bài trắc nghiệm phù hợp nhất với điều bạn muốn hiểu ngay lúc này."
+          description="Nếu bạn đang phân vân nghề phù hợp, bắt đầu với Holland. Nếu bạn muốn hiểu sâu cách mình học, hợp tác và phản ứng với áp lực, bắt đầu với Big Five."
         />
 
-        <div className="mt-10 grid gap-4 rounded-[28px] border border-primary-100 bg-white/70 p-5 text-sm text-ink-600 shadow-card sm:grid-cols-3">
-          <InfoPoint title="Làm một bài trước" description="Không cần làm cả hai ngay. Mỗi bài đều cho bạn một góc nhìn có ích." />
-          <InfoPoint title="Kết quả dễ đọc" description="Không dùng thuật ngữ nặng. Kết quả tập trung vào điều bạn có thể hiểu và ứng dụng." />
-          <InfoPoint title="Làm liền mạch" description="Mỗi bài mất khoảng 10 đến 15 phút, phù hợp cho một lần ngồi tập trung ngắn." />
+        <div className="mt-8 grid gap-4 text-sm text-ink-600 sm:grid-cols-3">
+          <InfoPoint title="Mỗi bài 10 đến 15 phút" description="Một phiên tập trung ngắn, không quá tải." />
+          <InfoPoint title="Bắt đầu với 1 bài" description="Không cần làm cả hai ngay ở lượt đầu tiên." />
+          <InfoPoint title="Kết quả dễ đọc" description="Ngắn gọn, rõ ràng và đủ để ra quyết định tiếp theo." />
         </div>
 
         {assessments.length === 0 ? (
@@ -73,24 +71,13 @@ function AssessmentsPage() {
         ) : (
           <div className="mt-10 grid gap-6 lg:grid-cols-2">
             {assessments.map((assessment) => (
-              <AssessmentCard key={assessment.id} assessment={assessment} />
+              <AssessmentCard key={assessment.id} assessment={assessment} compact />
             ))}
           </div>
         )}
 
-        <div className="mt-12 rounded-[28px] bg-primary-700 p-6 text-white shadow-soft sm:p-8">
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-            <div className="max-w-2xl">
-              <h2 className="text-2xl font-semibold tracking-tight">Muốn nhìn bức tranh toàn diện hơn?</h2>
-              <p className="mt-3 text-sm leading-7 text-primary-100 sm:text-base">
-                Sau khi hoàn thành một bài, bạn có thể quay lại làm bài còn lại để so sánh sở thích nghề nghiệp với đặc điểm tính cách của mình.
-              </p>
-            </div>
-            <ButtonLink to="/" variant="secondary" className="border-white/20 bg-white text-primary-700 hover:bg-primary-50">
-              Về trang chủ
-              <ArrowRightIcon />
-            </ButtonLink>
-          </div>
+        <div className="mt-12 border-t border-ink-200 pt-6 text-sm leading-7 text-ink-600">
+          Sau khi hoàn thành một bài, bạn luôn có thể quay lại làm bài còn lại để đối chiếu kết quả và có góc nhìn đầy đủ hơn.
         </div>
       </PageContainer>
     </div>
@@ -99,8 +86,8 @@ function AssessmentsPage() {
 
 function InfoPoint({ title, description }: { title: string; description: string }) {
   return (
-    <div className="rounded-2xl bg-ink-50 px-4 py-4">
-      <p className="font-semibold text-ink-900">{title}</p>
+    <div className="px-1 py-2">
+      <p className="font-label text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-700">{title}</p>
       <p className="mt-2 leading-6 text-ink-600">{description}</p>
     </div>
   )

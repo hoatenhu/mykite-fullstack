@@ -14,7 +14,7 @@ interface BigFiveChartProps {
   scores: Record<BigFiveDimension, number>
 }
 
-const COLORS = ['#2f398e', '#656bb0', '#8288bb', '#c7ccea', '#1d2357']
+const COLORS = ['#111111', '#2a2a2a', '#3c3c3c', '#575757', '#7a7a7a']
 
 export function BigFiveChart({ scores }: BigFiveChartProps) {
   const data = (Object.keys(BIGFIVE_LABELS) as BigFiveDimension[]).map((dim, idx) => ({
@@ -32,20 +32,20 @@ export function BigFiveChart({ scores }: BigFiveChartProps) {
           layout="vertical"
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
         >
-          <CartesianGrid strokeDasharray="3 3" stroke="#d4d7e9" />
-          <XAxis type="number" domain={[0, 100]} tick={{ fill: '#67708e' }} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#d1d1c8" />
+          <XAxis type="number" domain={[0, 100]} tick={{ fill: '#4f4f4a' }} />
           <YAxis
             dataKey="dimension"
             type="category"
-            tick={{ fill: '#34384e', fontSize: 12 }}
+            tick={{ fill: '#232320', fontSize: 12 }}
             width={100}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: 'white',
-              border: '1px solid #dce2f4',
-              borderRadius: '16px',
-              boxShadow: '0 18px 40px -26px rgba(32, 35, 50, 0.18)',
+              backgroundColor: '#f7f7f2',
+              border: '2px solid #10100f',
+              borderRadius: '12px',
+              boxShadow: '4px 4px 0 rgba(0, 0, 0, 0.8)',
             }}
             formatter={(value: number) => [`${value}%`, 'Điểm số']}
           />

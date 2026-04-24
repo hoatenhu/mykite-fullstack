@@ -1,22 +1,27 @@
 import { Link } from '@tanstack/react-router'
 import type { Assessment } from '@/lib/api'
-import { BrainIcon, ClipboardIcon, ClockIcon } from '@/components/icons'
-import { ButtonLink, Card, Pill } from '@/components/ui'
+import { BrainIcon, CheckCircleIcon, ClipboardIcon, ClockIcon } from '@/components/icons'
+import { Card, Pill } from '@/components/ui'
+import { BigFiveDoodle, HollandDoodle } from '@/components/VintageIllustrations'
 
 const assessmentVisual = {
   holland: {
     icon: ClipboardIcon,
-    accent: 'from-primary-600/10 via-primary-400/5 to-white',
-    border: 'border-primary-100',
-    iconBg: 'bg-primary-700 text-white',
-    summary: 'Tập trung vào xu hướng nghề nghiệp, môi trường học tập và kiểu công việc hợp với bạn.',
+    iconBg: 'bg-paper-200 text-ink-900',
+    badge: 'Hướng nghiệp',
+    summary: 'Đối chiếu sở thích, môi trường và nhịp công việc để thấy nhóm nghề hợp với bạn.',
+    prompt: 'Phù hợp khi bạn đang cần một điểm bắt đầu rõ ràng cho chọn ngành, chọn nghề.',
+    outcomes: ['Những kiểu công việc dễ có động lực', 'Môi trường học tập và làm việc hợp hơn', 'Các nhóm nghề nên ưu tiên tìm hiểu'],
+    cta: 'Khám phá nghề hợp',
   },
   bigfive: {
     icon: BrainIcon,
-    accent: 'from-indigo-600/10 via-indigo-400/5 to-white',
-    border: 'border-indigo-100',
-    iconBg: 'bg-indigo-900 text-white',
-    summary: 'Đào sâu tính cách, cách bạn học, phối hợp với người khác và phản ứng với áp lực.',
+    iconBg: 'bg-paper-200 text-ink-900',
+    badge: 'Tính cách',
+    summary: 'Đọc khí chất cốt lõi, cách bạn hợp tác, học hỏi và giữ cân bằng dưới áp lực.',
+    prompt: 'Phù hợp khi bạn muốn hiểu sâu cách mình vận hành trước khi ra quyết định lớn.',
+    outcomes: ['Cách bạn tiếp nhận thay đổi và stress', 'Kiểu hợp tác và giao tiếp tự nhiên', 'Thế mạnh cần bồi dưỡng để phát triển lâu dài'],
+    cta: 'Hiểu rõ tính cách',
   },
 }
 
@@ -29,46 +34,61 @@ export function AssessmentCard({
 }) {
   const config = assessmentVisual[assessment.type]
   const Icon = config.icon
+  const outcomes = compact ? config.outcomes.slice(0, 2) : config.outcomes
 
   return (
-    <Card className={`group relative overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-card border-2 ${config.border}`}>
-      <div className={`absolute right-0 top-0 h-32 w-full bg-gradient-to-br transition-opacity duration-500 group-hover:opacity-80 ${config.accent}`} />
-      <div className="relative p-7 sm:p-9 text-left">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className={`flex h-16 w-16 items-center justify-center rounded-2xl ${config.iconBg} shadow-soft transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-primary-300/40`}>
-            <Icon className="h-8 w-8" />
+    <Link
+      to="/quiz/$assessmentId"
+      params={{ assessmentId: assessment.id }}
+      className="group block outline-none"
+    >
+      <Card className="relative overflow-hidden border border-ink-300 bg-paper-50/95 p-7 text-left shadow-[0_16px_36px_rgba(16,16,15,0.08)] transition-all duration-200 will-change-transform sm:p-8 group-hover:-translate-y-1 group-hover:shadow-[0_22px_42px_rgba(16,16,15,0.1)] group-active:translate-y-[1px]">
+        <span className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-ink-200 to-transparent opacity-80" />
+
+        <div className="relative">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className={`flex h-12 w-12 items-center justify-center rounded-2xl border border-ink-200 ${config.iconBg}`}>
+              <Icon className="h-6 w-6" />
+            </div>
+            <Pill className="border-ink-200 bg-paper-200/70 text-ink-600">
+              {config.badge}
+            </Pill>
           </div>
-          <Pill className={assessment.type === 'holland' ? 'bg-primary-50 text-primary-700 border-primary-100' : 'bg-indigo-50 text-indigo-700 border-indigo-100'}>
-            {assessment.type === 'holland' ? 'Hướng nghiệp' : 'Tính cách'}
-          </Pill>
+
+          <h3 className="mt-6 text-4xl font-semibold leading-tight tracking-[-0.03em] text-ink-900 sm:text-5xl">{assessment.nameVi}</h3>
+          <p className="mt-4 max-w-lg text-sm leading-7 text-ink-600">{config.summary}</p>
+
+          <div className="mt-6 rounded-[24px] bg-paper-200/55 px-5 py-5">
+            {assessment.type === 'holland' ? <HollandDoodle className="h-32 w-full" /> : <BigFiveDoodle className="h-32 w-full" />}
+          </div>
+
+          {!compact ? <p className="mt-3 text-sm leading-7 text-ink-500 italic">{config.prompt}</p> : null}
+
+          <div className="mt-6 space-y-3">
+            {outcomes.map((outcome) => (
+              <div key={outcome} className="flex items-start gap-3 text-sm leading-6 text-ink-600">
+                <CheckCircleIcon className="mt-0.5 h-[18px] w-[18px] shrink-0 text-ink-700" />
+                <span>{outcome}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-7 flex flex-wrap gap-3 font-label text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-500">
+            <div className="inline-flex items-center gap-2 rounded-full border border-ink-200 bg-paper-200/85 px-3.5 py-2">
+              <ClipboardIcon className="h-4 w-4 text-ink-700" />
+              <span>{assessment.questionCount} câu hỏi</span>
+            </div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-ink-200 bg-paper-200/85 px-3.5 py-2">
+              <ClockIcon className="h-4 w-4 text-ink-700" />
+              <span>Khoảng {assessment.estimatedMinutes ?? 10} phút</span>
+            </div>
+          </div>
+
+          <span className="ink-button mt-8 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border-ink-800 bg-ink-900 px-6 py-3 font-label text-sm font-bold uppercase tracking-[0.16em] text-paper-50 shadow-[3px_3px_0_rgba(10,10,9,0.92)] transition-all duration-200 group-hover:bg-ink-800 sm:w-auto">
+            {config.cta}
+          </span>
         </div>
-
-        <h3 className="mt-6 text-2xl font-bold tracking-tight text-ink-900 group-hover:text-primary-700 transition-colors">{assessment.nameVi}</h3>
-        <p className="mt-3 text-sm leading-7 text-ink-600">{assessment.descriptionVi}</p>
-        {!compact ? <p className="mt-3 text-sm leading-7 text-ink-500 font-medium italic">{config.summary}</p> : null}
-
-        <div className="mt-7 flex flex-wrap gap-3 text-sm text-ink-600 font-medium">
-          <div className="inline-flex items-center gap-2 rounded-xl bg-ink-50 px-3.5 py-2">
-            <ClipboardIcon className="h-4 w-4 text-primary-600" />
-            <span>{assessment.questionCount} câu hỏi</span>
-          </div>
-          <div className="inline-flex items-center gap-2 rounded-xl bg-ink-50 px-3.5 py-2">
-            <ClockIcon className="h-4 w-4 text-primary-600" />
-            <span>Khoảng {assessment.estimatedMinutes ?? 10} phút</span>
-          </div>
-        </div>
-
-        <Link
-          to="/quiz/$assessmentId"
-          params={{ assessmentId: assessment.id }}
-          className={`mt-8 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-bold transition-all duration-300 active:scale-95 shadow-soft hover:shadow-primary-300/30 sm:w-auto ${assessment.type === 'holland'
-              ? 'bg-primary-700 text-white hover:bg-primary-800'
-              : 'bg-indigo-900 text-white hover:bg-indigo-950'
-            }`}
-        >
-          Bắt đầu làm bài
-        </Link>
-      </div>
-    </Card>
+      </Card>
+    </Link>
   )
 }
