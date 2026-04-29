@@ -1,14 +1,17 @@
 import logoPrimary from '@/assets/brand/logo-primary.png'
+import logoDark from '@/assets/brand/logo-dark.png'
 import logoLight from '@/assets/brand/logo-light.png'
 
 export function BrandLogo({
-  mode = 'primary',
+  mode = 'dark',
   className = 'h-10 w-auto',
   alt = 'MyKite',
 }: {
-  mode?: 'primary' | 'light'
+  mode?: 'dark' | 'primary' | 'light'
   className?: string
   alt?: string
 }) {
-  return <img src={mode === 'light' ? logoLight : logoPrimary} alt={alt} className={className} />
+  const src = mode === 'light' ? logoLight : mode === 'primary' ? logoPrimary : logoDark
+
+  return <img src={src} alt={alt} className={className} />
 }
